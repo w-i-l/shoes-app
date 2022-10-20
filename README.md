@@ -1,6 +1,6 @@
 # Skinkrs
 
-##Shoes App online shop
+## Shoes App online shop
 
 WIth simply come clicks you can order your favorite shoes 
 
