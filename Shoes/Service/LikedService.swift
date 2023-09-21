@@ -6,31 +6,32 @@
 //
 
 import Foundation
+import Combine
 
 class LikedService {
     static let shared = LikedService()
     
-    private var likedProducts: [Product] = []
+    private(set) var likedProducts: CurrentValueSubject<[Product], Never> = .init([])
     
     private init() {
         if let likedProducts = UserDefaults.standard.object(forKey: "likedProducts") as? [Product] {
-            self.likedProducts = likedProducts
+            self.likedProducts.value = likedProducts
         }
     }
     
     func getLikedProducts() -> [Product] {
-        return self.likedProducts
+        return self.likedProducts.value
     }
     
     func isProductLiked(productID: UUID) -> Bool {
-        return self.likedProducts.first { $0.id == productID } != nil
+        return self.likedProducts.value.first { $0.id == productID } != nil
     }
     
     func addLikedProduct(product: Product) {
-        self.likedProducts.append(product)
+        self.likedProducts.value.append(product)
     }
     
     func removeLikedProduct(productID: UUID) {
-        self.likedProducts.removeAll { $0.id == productID }
+        self.likedProducts.value.removeAll { $0.id == productID }
     }
 }

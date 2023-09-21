@@ -18,4 +18,16 @@ class HomeViewModel: ObservableObject {
         let numberOfArrivalProducts = numberOfRowsForArrivalProducts * numberOfColumnsForArrivalProducts
         self.newArrivalsProducts = MockedAPI.shared.getArrivalsProducts(numberOfElements: numberOfArrivalProducts)
     }
+    
+    func manageLikedProduct(product: Product) {
+        if LikedService.shared.isProductLiked(productID: product.id) {
+            LikedService.shared.removeLikedProduct(productID: product.id)
+        } else {
+            LikedService.shared.addLikedProduct(product: product)
+        }
+    }
+    
+    func isProductLiked(productID: UUID) -> Bool {
+        return LikedService.shared.isProductLiked(productID: productID)
+    }
 }

@@ -84,10 +84,7 @@ struct HomeView: View {
                                     
                                     let index = viewModel.numberOfRowsForArrivalProducts * row + column
                                     let product = viewModel.newArrivalsProducts[index]
-                                    Card(
-                                        product.imageArray[0],
-                                        product.name
-                                    )
+                                    CardView(product: product)
                                     }
                                 }
                             }

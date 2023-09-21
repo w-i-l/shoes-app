@@ -22,14 +22,18 @@ class APPViewModel: BaseViewModel {
         super.init()
         
         AppService.shared.selectedTab
-            .zip(AppService.shared.showTabBar)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] selectedTab, showTabBar in
+            .sink { [weak self] selectedTab in
                 self?.selectedTab = selectedTab
-                self?.showTabBar = showTabBar
             }
             .store(in: &self.bag)
         
+        AppService.shared.showTabBar
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] showTabBar in
+                self?.showTabBar
+            }
+            .store(in: &self.bag)
     }
     
     func setSelectedTab(tab: TabItem) {

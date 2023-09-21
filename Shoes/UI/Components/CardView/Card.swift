@@ -1,5 +1,5 @@
 //
-//  Card.swift
+//  CardView.swift
 //  Tesla
 //
 //  Created by mishu on 27.07.2022.
@@ -7,30 +7,27 @@
 
 import SwiftUI
 
-struct Card:View{
+struct CardView: View {
     
-    var image:String
-    var text:String
-    var item:Product
+    var product: Product
     
-    @EnvironmentObject var showMenu: Storage
+    @StateObject private var viewModel: CardViewModel = .shared
     @State private var isPresented = false
-    
     
     var body: some View{
         
         //GO TO ITEM PAGE
         NavigationLink(
             destination: Item(
-                item.name,
-                item.price,
-                item.imageArray,
-                item.logo,
-                item.subtitle,
-                item.rating,
-                item.reviews,
-                item.description,
-                item.sizes
+                product.name,
+                product.price,
+                product.imageArray,
+                product.logo,
+                product.subtitle,
+                product.rating,
+                product.reviews,
+                product.description,
+                product.sizes
             )
                 .navigationBarHidden(true),
             isActive: $isPresented
@@ -46,15 +43,15 @@ struct Card:View{
                 
                 //INFOS
                 VStack{
-                    Image(image)
+                    Image(product.imageArray[0])
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(width: UIScreen.main.bounds.width / 3,height: UIScreen.main.bounds.width / 3)
                     
-                    Text(text)
+                    Text(product.name)
                         .foregroundColor(dark_color)
                         .fontWeight(.medium)
-                        .font(.system(size: text.count > 10 ? 16 : 20))
+                        .font(.system(size: product.name.count > 10 ? 16 : 20))
                         .padding(.top, -20)
                         .padding(.bottom, 10)
                         .padding(.horizontal, 10)
@@ -63,10 +60,10 @@ struct Card:View{
                 // liked heart
                 VStack {
                     HStack {
-                        Image(systemName: !showMenu.liked.filter{$0.name == self.text}.isEmpty ? "heart.fill" : "heart")
+                        Image(systemName: viewModel.isProductLiked(productID: product.id) ? "heart.fill" : "heart")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .foregroundColor(!showMenu.liked.filter{$0.name == self.text}.isEmpty ? red_pastel : .gray)
+                            .foregroundColor(viewModel.isProductLiked(productID: product.id) ? red_pastel : .gray)
                             .frame(width: 25, height: 25)
                         
                         Spacer()
@@ -78,24 +75,16 @@ struct Card:View{
                     
                     //TO NOT ACTIVATE THE NAVIGATION LINK AND KEEP THE MENU
                     isPresented = false
-                    showMenu.showMenu = true
                     
-                    //IF IT IS LIKED OR NOT TO APPEND OR REMOVE
-                    if !showMenu.liked.filter({$0.name == self.text}).isEmpty{
-                        showMenu.liked = showMenu.liked.filter{$0.name != self.text}
-                    }
-                    else{
-                        showMenu.liked.append(shoesArray.filter{$0.name == self.text}[0])
-                    }
-                    
+                    viewModel.hideTabBar()
+                    viewModel.manageLikedProduct(product: product)
                 }
                 
             }
             .frame(width: UIScreen.main.bounds.width / 2.5,height: UIScreen.main.bounds.width / 2.5)
             .padding(5)
             .onTapGesture() {
-                // GO TO ITEM PAGE
-                showMenu.showMenu = false
+                viewModel.hideTabBar()
                 isPresented = true
             }
         }
@@ -104,11 +93,12 @@ struct Card:View{
         .contextMenu {
             
             //IF IT IS LIKED
-            if !showMenu.liked.filter{$0 == self.item}.isEmpty {
-                Button(
-                    action: {
-                        showMenu.liked = showMenu.liked.filter{ $0 != self.item }
-                    }) {
+            
+            Button(
+                action: {
+                    viewModel.manageLikedProduct(product: product)
+                }) {
+                    if viewModel.isProductLiked(productID: product.id) {
                         HStack {
                             Text("Remove from favorites")
                                 .foregroundColor(dark_color)
@@ -116,15 +106,7 @@ struct Card:View{
                             Spacer()
                             
                         }
-                    }
-            }
-            // IF IT IS NOT LIKED
-            else {
-                Button(
-                    action: {
-                        showMenu.liked.append(item)
-                        
-                    }) {
+                    } else {
                         HStack {
                             Text("Add to favorites")
                                 .foregroundColor(dark_color)
@@ -134,19 +116,9 @@ struct Card:View{
                             Image(systemName: "heart")
                         }
                     }
-            }
+                }
+            
         }
-    }
-    
-    init(_ image: String = "adidas",_ text: String = "Zion 2"){
-        self.image = image
-        self.text = text
-        self.item = shoesArray.filter{ $0.name == text }[0]
     }
 }
 
-struct Home_Previews:PreviewProvider {
-    static var previews: some View {
-        Search()
-    }
-}

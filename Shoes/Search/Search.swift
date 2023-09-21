@@ -156,10 +156,16 @@ struct Search: View {
                                 if !arrayToShow.isEmpty {
                                     ForEach(Array(stride(from:0,to:arrayToShow.count,by:2)),id:\.self) { no in
                                         HStack(spacing:10) {
-                                            Card(arrayToShow[no].imageArray.first!,arrayToShow[no].name)
+                                            
+                                            let firstCard = arrayToShow[no]
+                                            
+                                            CardView(product: firstCard)
+
                                             //TO SIPLAY ON THE SECOND COLUMN
                                             if no+1<arrayToShow.count{
-                                                Card(arrayToShow[no+1].imageArray.first!,arrayToShow[no+1].name)
+                                                let secondCard = arrayToShow[no + 1]
+                                                CardView(product: secondCard)
+
                                             }
                                             else{
                                                 Spacer()
