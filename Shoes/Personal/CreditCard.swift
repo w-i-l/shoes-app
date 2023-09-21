@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-struct CreditCard:View,Equatable,Hashable{
+struct CreditCard: View, Equatable, Hashable {
+    
     static func == (lhs: CreditCard, rhs: CreditCard) -> Bool {
         lhs.cardNumber == rhs.cardNumber
     }
@@ -15,41 +16,36 @@ struct CreditCard:View,Equatable,Hashable{
         hasher.combine(cardNumber)
     }
 
-    @ObservedObject var value:NumbersOnly = NumbersOnly()
-    @EnvironmentObject var showMenu:Storage
+    @ObservedObject var value: NumbersOnly = NumbersOnly()
+    @EnvironmentObject var showMenu: Storage
     
-    let gradient:LinearGradient
-    let cardNumber:String
-    let name:String
-    let expirationDate:String
+    let gradient: LinearGradient
+    let cardNumber: String
+    let name: String
+    let expirationDate: String
     
-    var body: some View{
+    var body: some View {
         
-        ZStack{
+        ZStack {
             RoundedRectangle(cornerRadius: 10)
                 .fill(gradient)
-                .aspectRatio(1.73,contentMode: .fill)
-                .frame(width: min(UIScreen.main.bounds.width/1.2,315), height: min(UIScreen.main.bounds.height/4.5,190))
+                .aspectRatio(1.73, contentMode: .fill)
+                .frame(width: min(UIScreen.main.bounds.width / 1.2, 315), height: min(UIScreen.main.bounds.height / 4.5, 190))
             
-            VStack{
+            VStack {
                 
-                HStack{
+                HStack {
                     
                     Spacer()
                     
                     Image((cardNumber.first ?? "0").asciiValue! % 2 == 0 ? "mastercard" : "visa")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: UIScreen.main.bounds.width/9, height: UIScreen.main.bounds.width/12)
+                        .frame(width: UIScreen.main.bounds.width / 9, height: UIScreen.main.bounds.width / 12)
                 }
                 .padding(.top,10)
                 .padding(.horizontal)
-                .padding(.bottom,30
-)
-//                .padding(.horizontal)
-//                .padding(.top)
-                
-//                Spacer()
+                .padding(.bottom,30)
                 
                 Text(cardNumber)
                     .foregroundColor(white)
@@ -57,7 +53,7 @@ struct CreditCard:View,Equatable,Hashable{
                     .fontWeight(.bold)
                     .padding(.horizontal)
                 
-                HStack{
+                HStack {
                     
                     Text(name)
                         .foregroundColor(white)
@@ -74,24 +70,17 @@ struct CreditCard:View,Equatable,Hashable{
                         .padding()
                     
                 }
-//                .padding()
-                
-                
             }
-//            .padding()
             
         }
-        .frame(width: UIScreen.main.bounds.width/1.2, height: UIScreen.main.bounds.height/4.5)
-//        .padding()
-        
-       
+        .frame(width: UIScreen.main.bounds.width / 1.2, height: UIScreen.main.bounds.height / 4.5)
     }
     
-    func width()->Double{
-        return min(UIScreen.main.bounds.width/1.2,315)
+    func width() -> Double {
+        return min(UIScreen.main.bounds.width / 1.2, 315)
     }
-    func height()->Double{
-        min(UIScreen.main.bounds.height/4.5,190)
+    func height() -> Double {
+        min(UIScreen.main.bounds.height / 4.5, 190)
     }
     
     init( _ gradient:LinearGradient = gradients[1], _ cardNumber:String = "5482 4548 4521 4526", _ name:String = "Peter J. Parkinson", _ expirationDate:String = "07/25"){
@@ -134,8 +123,8 @@ struct CreditCard:View,Equatable,Hashable{
     }
 }
 
-struct PCreditCard_Personal:PreviewProvider{
-    static var previews: some View{
+struct PCreditCard_Personal: PreviewProvider {
+    static var previews: some View {
         CreditCard()
     }
 }

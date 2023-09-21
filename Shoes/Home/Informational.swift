@@ -7,20 +7,21 @@
 
 import SwiftUI
 
-struct Run:View{
+struct Run: View {
     
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var showMenu:Storage
+    @EnvironmentObject var showMenu: Storage
     
-    var body: some View{
-        ZStack{
+    var body: some View {
+        ZStack {
             background_color.ignoresSafeArea()
             
-            VStack{
+            VStack {
                 
                 //back button
-                HStack{
-                    Button(action:{
+                HStack {
+                    Button(
+                        action: {
                         
                         dismiss()
                         showMenu.showMenu = true
@@ -37,14 +38,7 @@ struct Run:View{
                     Spacer()
                 }
                 
-//                Image("run - 2")
-//                    .resizable()
-//                    .aspectRatio(contentMode: .fit)
-//                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 3)
-//                    .clipShape(RoundedRectangle(cornerRadius: 20))
-               
-                
-                ScrollView{
+                ScrollView {
                     
                     OnlyHeader(image: "run - 2", height: 250)
                     
@@ -53,20 +47,14 @@ struct Run:View{
                         .font(.system(size: 28))
                         .fontWeight(.medium)
                         .padding()
-                    
-                    
-                    
-                    
-                    ForEach(0..<3) {_ in
+
+                    ForEach(0..<3) { _ in
                         Text("As simple as running may be, it certainly isn’t easy. Especially when you’re a beginner. ‘You have to start where you are, not where you think you should be,’ says running coach and exercise physiologist Janet Hamilton. ‘If you go further or faster than you’re ready for, your body can’t adapt quickly enough and you’ll get injured.’ That’s why, with plans designed by highly experienced coach Sam Murphy, we’ve developed a five-part programme to take you from your very first steps to stepping up for your first race. So, are you ready?")
                             .foregroundColor(dark_color)
                             .font(.system(size: 20))
                             .fontWeight(.medium)
-                        .padding()
+                            .padding()
                     }
-                    
-                    
-                    
                 }
             }
         }
@@ -74,19 +62,14 @@ struct Run:View{
     }
 }
 
-struct previewS:PreviewProvider{
-    static var previews: some View{
-        Run()
-    }
-}
 //STREACHY HEADER
-struct OnlyHeader:View{
-    let image:String
-    let height:CGFloat
-    var body: some View{
+struct OnlyHeader: View {
+    let image: String
+    let height: CGFloat
+    var body: some View {
         
         
-        GeometryReader{proxy in
+        GeometryReader { proxy in
         
             let lengh = proxy.frame(in: .global).minY
            
@@ -97,26 +80,30 @@ struct OnlyHeader:View{
                     .frame(width:proxy.size.width,height:proxy.size.height)
                     .offset(y:lengh/14)
                     .clipped()
-                
             }
-            else{
+            else {
                 Image(image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: proxy.size.width, height: lengh <= 0 ? proxy.size.height : proxy.size.height+lengh)
                     .clipped()
                     .offset(y:-lengh)
-                    
             }
-               
-           
         }
         .frame(height:height)
         
     }
     
-    init (image:String = "Pamant",height:CGFloat = 300){
+    init (image: String = "Pamant", height:CGFloat = 300){
         self.image = image
         self.height = height
     }
 }
+
+struct previewS: PreviewProvider {
+    static var previews: some View {
+        Run()
+    }
+}
+
+

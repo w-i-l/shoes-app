@@ -7,18 +7,19 @@
 
 import SwiftUI
 
-struct Sizes:View{
-    let sizes:[Int]
-    var body: some View{
+struct Sizes: View {
+    let sizes: [Int]
+    var body: some View {
         ZStack{
+            
             background_color.ignoresSafeArea()
             
-            VStack{
+            VStack {
                 
-                ScrollView(showsIndicators:false){
-                    ForEach(Array(stride(from: 0, through: sizes.count - 1, by: 2)),id:\.self){no in
+                ScrollView(showsIndicators:false) {
+                    ForEach(Array(stride(from: 0, through: sizes.count - 1, by: 2)), id: \.self) { no in
                         VStack {
-                            HStack(spacing:30){
+                            HStack(spacing:30) {
                                 Text("\(sizes[no])")
                                     .foregroundColor(.gray)
                                     .font(.system(size: 50))
@@ -37,20 +38,20 @@ struct Sizes:View{
                             }
                             
                             Divider()
-                                .padding(.horizontal,60)
-                                .padding(.vertical,10)
+                                .padding(.horizontal, 60)
+                                .padding(.vertical, 10)
                         }
                         
                     }
                 }
-                .padding(.top,UIScreen.main.bounds.height/5+10)  
+                .padding(.top,UIScreen.main.bounds.height / 5 + 10)
             }
            
             
         }
        
     }
-    init(_ sizes:[Int] = [40,41,42,43,46,47]){
+    init(_ sizes:[Int] = [40, 41, 42, 43, 46, 47]) {
         self.sizes = sizes
     }
 }

@@ -7,32 +7,31 @@
 
 import SwiftUI
 
-struct Cart:View{
+struct Cart: View {
     
     
-    @EnvironmentObject var showMenu:Storage
-    @State var showingCheckout:Bool = false
+    @EnvironmentObject var showMenu: Storage
+    @State var showingCheckout: Bool = false
     
     //TOTAL PRICE OF CART'S ITEMS
-    var price:Double{
+    var price: Double {
         
-        get{
+        get {
             
-            var suma:Double = 0
-            for x in showMenu.cart{
+            var suma: Double = 0
+            for x in showMenu.cart {
                 suma += Double(x.key.price) * Double(x.value)
             }
             return suma
         }
-        
     }
     
-    var body: some View{
-        ZStack{
+    var body: some View {
+        ZStack {
             background_color.ignoresSafeArea()
             
-            VStack{
-                HStack{
+            VStack {
+                HStack {
                     Text("Cart")
                         .foregroundColor(dark_color)
                         .font(.system(size: 32))
@@ -42,31 +41,17 @@ struct Cart:View{
                     
                     VStack {
                         
-//                        ZStack {
-//
-//                            RoundedRectangle(cornerRadius: 10)
-//                                .fill(gray2)
-//                                .frame(width: 100, height: 40)
-////                                    .padding()
-//
-//                            Text("Checkout")
-//                                .foregroundColor(dark_color)
-//                                .font(.system(size: 20))
-//                                .fontWeight(.regular)
-//                        }
                         //TOTAL PRICE
                         Text(String(format:"%.2f",price)+"$")
                             .foregroundColor(showMenu.cart.isEmpty ? gray1 : .gray)
                             .font(.system(size: 18))
                             .fontWeight(.light)
                     }
-                    
                 }
                 .padding()
                 
-                
                 //CART IS EMPTY
-                if showMenu.cart.isEmpty{
+                if showMenu.cart.isEmpty {
                     
                     Spacer()
                 
@@ -74,32 +59,32 @@ struct Cart:View{
                         .foregroundColor(dark_color)
                         .font(.system(size: 20))
                         .fontWeight(.regular)
-                
-                   
-                 
-                    }
-                else{
+                    
+                    } else {
                     
                     
                     //DISPLAYIG THE MATCHED ITEMS
                     ScrollView(showsIndicators:false) {
-                        ForEach(Array(showMenu.cart.keys),id:\.self){elem in
+                        ForEach(Array(showMenu.cart.keys),id:\.self) { elem in
+                            
                             CartItem(elem.name, elem.imageArray[0])
+                            
                             Divider()
                                 .padding([.horizontal])
                                 .opacity(elem == Array(showMenu.cart.keys).last ? 0 : 1)
-                          
-                            
                         }
-                        HStack{
+                        
+                        HStack {
                             //clear cart
-                            Button(action: {
-                                showMenu.cart = [Product:Int]()
-                            }){
-                                ZStack{
+                            Button(
+                                action: {
+                                    showMenu.cart = [Product:Int]()
+                            }) {
+                                ZStack {
                                     RoundedRectangle(cornerRadius: 20)
                                         .fill(gray2)
-                                        .frame(width: UIScreen.main.bounds.width/3, height: 50)
+                                        .frame(width: UIScreen.main.bounds.width / 3, height: 50)
+                                    
                                     Text("Empty cart")
                                         .foregroundColor(dark_color)
                                         .font(.system(size: 18))
@@ -108,22 +93,16 @@ struct Cart:View{
                             }
                             
                             //checkout
-                            Button(action:{
-                                
-//                                showMenu.purchased.append(showMenu.cart)
-//                                showMenu.cart = [Product:Int]()
-                                showingCheckout = true
-//                                print(showMenu.purchased)
-                                
-                                
+                            Button(
+                                action: {
+                                    showingCheckout = true
                             }) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 20)
                                         .fill(gray2)
-                                        .frame(width: UIScreen.main.bounds.width/3, height: 50)
+                                        .frame(width: UIScreen.main.bounds.width / 3, height: 50)
                                         .padding()
                                         .opacity(0.8)
-
 
                                     Text("Checkout")
                                         .foregroundColor(dark_color )
@@ -138,18 +117,15 @@ struct Cart:View{
                 Spacer()
                 
             }
-
-            
         }
-        .sheet(isPresented: $showingCheckout){
+        .sheet(isPresented: $showingCheckout) {
             Checkout()
-                
         }
     }
 }
 
-struct Preview_Cart:PreviewProvider{
-    static var previews: some View{
+struct Preview_Cart: PreviewProvider {
+    static var previews: some View {
         Cart()
     }
 }

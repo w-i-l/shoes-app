@@ -13,38 +13,51 @@ struct Card:View{
     var text:String
     var item:Product
     
-    @EnvironmentObject var showMenu:Storage
+    @EnvironmentObject var showMenu: Storage
     @State private var isPresented = false
     
     
     var body: some View{
+        
         //GO TO ITEM PAGE
-        NavigationLink(destination:Item(item.name, item.price, item.imageArray, item.logo, item.subtitle, item.rating, item.reviews, item.description, item.sizes).navigationBarHidden(true),isActive: $isPresented) {
+        NavigationLink(
+            destination: Item(
+                item.name,
+                item.price,
+                item.imageArray,
+                item.logo,
+                item.subtitle,
+                item.rating,
+                item.reviews,
+                item.description,
+                item.sizes
+            )
+                .navigationBarHidden(true),
+            isActive: $isPresented
+        ) {
             
-            ZStack{
+            ZStack {
+                
                 //BODY
                 RoundedRectangle(cornerRadius: 20)
                     .fill(gray2)
-                    .frame(width:UIScreen.main.bounds.width/2.5,height:UIScreen.main.bounds.width/2.5)
-//                    .shadow(color: .black.opacity(0.4), radius: 1,x:5, y: 6)
+                    .frame(width: UIScreen.main.bounds.width / 2.5, height: UIScreen.main.bounds.width / 2.5)
                     .innerShadow(color: gray2)
-               
+                
                 //INFOS
                 VStack{
                     Image(image)
                         .resizable()
-                        .aspectRatio(contentMode:.fit)
-                        .frame(width:UIScreen.main.bounds.width/3,height:UIScreen.main.bounds.width/3)
-    //                    .shadow(color: .black, radius: 3, x: 4, y: 2)
-    //                    .rotationEffect(.degrees(-27))
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: UIScreen.main.bounds.width / 3,height: UIScreen.main.bounds.width / 3)
                     
                     Text(text)
                         .foregroundColor(dark_color)
                         .fontWeight(.medium)
                         .font(.system(size: text.count > 10 ? 16 : 20))
-                        .padding(.top,-20)
-                        .padding(.bottom,10)
-                        .padding(.horizontal,10)
+                        .padding(.top, -20)
+                        .padding(.bottom, 10)
+                        .padding(.horizontal, 10)
                 }
                 
                 // liked heart
@@ -76,55 +89,64 @@ struct Card:View{
                     }
                     
                 }
-                    
+                
             }
-            .frame(width:UIScreen.main.bounds.width/2.5,height:UIScreen.main.bounds.width/2.5)
+            .frame(width: UIScreen.main.bounds.width / 2.5,height: UIScreen.main.bounds.width / 2.5)
             .padding(5)
-            .onTapGesture(){
+            .onTapGesture() {
                 // GO TO ITEM PAGE
                 showMenu.showMenu = false
                 isPresented = true
             }
         }
+        
         //ON LONG PRESS SIMILAR WITH 3DTOUCH
-        .contextMenu{
+        .contextMenu {
             
             //IF IT IS LIKED
-            if !showMenu.liked.filter{$0 == self.item}.isEmpty{
-                Button(action: {showMenu.liked = showMenu.liked.filter{$0 != self.item }}){
-                    HStack {
-                        Text("Remove from favorites")
-                            .foregroundColor(dark_color)
-                        
-                        Spacer()
-                        
+            if !showMenu.liked.filter{$0 == self.item}.isEmpty {
+                Button(
+                    action: {
+                        showMenu.liked = showMenu.liked.filter{ $0 != self.item }
+                    }) {
+                        HStack {
+                            Text("Remove from favorites")
+                                .foregroundColor(dark_color)
+                            
+                            Spacer()
+                            
+                        }
                     }
-                }
             }
             // IF IT IS NOT LIKED
-            else{
-                Button(action: {showMenu.liked.append(item)}){
-                    HStack {
-                        Text("Add to favorites")
-                            .foregroundColor(dark_color)
+            else {
+                Button(
+                    action: {
+                        showMenu.liked.append(item)
                         
-                        Spacer()
-                        
-                        Image(systemName: "heart")
-                                            }
-                }
+                    }) {
+                        HStack {
+                            Text("Add to favorites")
+                                .foregroundColor(dark_color)
+                            
+                            Spacer()
+                            
+                            Image(systemName: "heart")
+                        }
+                    }
             }
         }
     }
-    init(_ image:String = "adidas",_ text:String = "Zion 2"){
+    
+    init(_ image: String = "adidas",_ text: String = "Zion 2"){
         self.image = image
         self.text = text
-        self.item = shoesArray.filter{$0.name == text}[0]
+        self.item = shoesArray.filter{ $0.name == text }[0]
     }
 }
 
-struct Home_Previews:PreviewProvider{
-    static var previews: some View{
-       Search()
+struct Home_Previews:PreviewProvider {
+    static var previews: some View {
+        Search()
     }
 }

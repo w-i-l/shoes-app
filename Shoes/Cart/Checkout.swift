@@ -7,28 +7,28 @@
 
 import SwiftUI
 
-struct Checkout:View{
+struct Checkout: View {
     
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var showMenu:Storage
+    @EnvironmentObject var showMenu: Storage
     
-    @State var street:String = " "
-    @State var number:String = " "
-    @State var town:String = " "
-    @State var region:String = " "
-    @State var country:String = " "
-    @State var isExpended:Bool = false
-    @State var paymentMethod:String = "cash"
+    @State var street: String = " "
+    @State var number: String = " "
+    @State var town: String = " "
+    @State var region: String = " "
+    @State var country: String = " "
+    @State var isExpended: Bool = false
+    @State var paymentMethod: String = "cash"
     
-    var body: some View{
-        ZStack{
+    var body: some View {
+        ZStack {
             background_color.ignoresSafeArea()
             
-            VStack(spacing:0){
+            VStack(spacing:0) {
                 
                 
                 //back button
-                HStack{
+                HStack {
                     Button(action:{
                         
                         dismiss()
@@ -49,12 +49,12 @@ struct Checkout:View{
                         .fontWeight(.bold)
                         .font(.system(size: 24))
                         .padding()
-                        .padding(.leading,-40)
+                        .padding(.leading, -40)
                     
                     Spacer()
                 }
                 
-                ScrollView(){
+                ScrollView(showsIndicators: false) {
                     
                     HStack {
                         Text("Shipping info")
@@ -66,10 +66,9 @@ struct Checkout:View{
                         
                     }
                     .padding()
-//                    .padding(.top,30)
                     
-                    ForEach(Array(zip(["Street","Number","Town","Region","Country"],[$street,$number,$town,$region,$country])),id:\.0) {elem in
-                        VStack{
+                    ForEach(Array(zip(["Street", "Number", "Town", "Region", "Country"],[$street, $number, $town, $region, $country])),id: \.0)  { elem in
+                        VStack {
                             HStack {
                                 Text(elem.0)
                                     .foregroundColor(.gray)
@@ -78,8 +77,8 @@ struct Checkout:View{
                                 
                                 Spacer()
                             }
-                            .padding(.bottom,-5)
-                            .padding(.leading,30)
+                            .padding(.bottom, -5)
+                            .padding(.leading, 30)
                             
                             
                             ZStack {
@@ -92,16 +91,16 @@ struct Checkout:View{
                                     .frame(height: 40)
                                     .font(.system(size: 20))
                                     .padding(.horizontal)
-                                    .onTapGesture(){
+                                    .onTapGesture {
                                         elem.1.wrappedValue = ""
                                     }
                                     
                                     
                             }
-                            .frame(height:50)
-                            .padding(.horizontal,30)
+                            .frame(height: 50)
+                            .padding(.horizontal, 30)
                         }
-                        .padding(.vertical,5)
+                        .padding(.vertical, 5)
                     }
                     
                     
@@ -117,15 +116,15 @@ struct Checkout:View{
                     .padding()
                     .padding(.top,30)
                     
-                    HStack{
-                        ForEach(["Cash","Card"],id:\.self){elem in
+                    HStack {
+                        ForEach(["Cash","Card"],id:\.self) { elem in
                             Button {
                                 paymentMethod = elem.lowercased()
                             } label: {
                                 ZStack {
                                     
                                     RoundedRectangle(cornerRadius: 20)
-                                        .stroke(elem.lowercased() == paymentMethod ? dark_color: gray2,lineWidth:2)
+                                        .stroke(elem.lowercased() == paymentMethod ? dark_color: gray2, lineWidth:  2)
                                         .frame(height:50)
                                     
                                     Text(elem)
@@ -144,8 +143,8 @@ struct Checkout:View{
                 
                 Button {
                     
-                    for x in [street,number,town,region,country]{
-                        if x.isEmpty || x == " "{
+                    for x in [street,number,town,region,country] {
+                        if x.isEmpty || x == " " {
                             return
                         }
                     }
@@ -155,10 +154,14 @@ struct Checkout:View{
                     dismiss()
                     
                 } label: {
-                    ZStack{
+                    ZStack {
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(LinearGradient(colors: [gray2,gray1], startPoint: .topLeading, endPoint: .bottomTrailing))
-                            .frame(width: UIScreen.main.bounds.width/3, height: 75)
+                            .fill(LinearGradient(
+                                colors: [gray2, gray1],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ))
+                            .frame(width: UIScreen.main.bounds.width / 3, height: 75)
                         
                         Text("Proceed")
                             .foregroundColor(dark_color)
@@ -167,10 +170,7 @@ struct Checkout:View{
                         
                     }
                 }
-
-                
             }
-//            .padding(.bottom)
         }
     }
 }

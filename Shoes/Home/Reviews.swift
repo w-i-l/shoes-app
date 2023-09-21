@@ -7,25 +7,29 @@
 
 import SwiftUI
 
-struct Reviews:View{
+struct Reviews: View {
     
-    let reviewsNumber:Int
-    
-    var body: some View{
-        ZStack{
+    let reviewsNumber: Int
+     
+    var body: some View {
+        ZStack {
+            
             background_color.ignoresSafeArea()
-            VStack{
+            
+            VStack {
                 ScrollView(showsIndicators:false) {
-                    ForEach(0..<reviewsNumber){no in
+                    ForEach(0..<reviewsNumber) { no in
                         VStack {
-                            HStack{
+                            HStack {
+                                
                                 //PERSON PICTURE
-                                Image("person - \(no%4 == 0  ? 1 : no%4+1 )")
+                                Image("person - \(no % 4 == 0  ? 1 : no % 4 + 1 )")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .foregroundColor(gray1)
                                     .frame(width: 30, height: 30)
                                     .clipShape(Circle())
+                                
                                 //USERNAME
                                 Text(usernames.randomElement()!)
                                     .foregroundColor(dark_color)
@@ -48,7 +52,7 @@ struct Reviews:View{
                                 
                             }
                             
-                            Text(shoesReviews[no%5])
+                            Text(shoesReviews[no % 5])
                                 .foregroundColor(.gray)
                                 .font(.system(size: 16))
                                 .fontWeight(.light)
@@ -58,9 +62,10 @@ struct Reviews:View{
                     }
                 }
             }
-            .padding(.top,10)
+            .padding(.top, 10)
         }
     }
+    
     init(_ reviews:Int = 10){
         self.reviewsNumber = reviews
     }

@@ -14,9 +14,9 @@ struct Home:View{
     let width = UIScreen.main.bounds.width
     let height = UIScreen.main.bounds.height
     
-    var body: some View{
+    var body: some View {
         NavigationView {
-            ZStack{
+            ZStack {
                 background_color.ignoresSafeArea()
                  VStack{
                      ScrollView(showsIndicators:false) {

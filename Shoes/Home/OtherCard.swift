@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct OtherCard:View{
+struct OtherCard:View {
     
     let name:String
     let image:String
     let price:Int
     
-    var body: some View{
-        ZStack{
+    var body: some View {
+        ZStack {
             RoundedRectangle(cornerRadius: 20)
                 .fill(background_color)
                 
@@ -28,10 +28,7 @@ struct OtherCard:View{
                 Image(image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-//                    .frame(width: UIScreen.main
-//                            .bounds.width/3.2, height:UIScreen.main
-//                            .bounds.width/5)
-                
+
                 Spacer()
                 
                 Text(name)
@@ -52,19 +49,17 @@ struct OtherCard:View{
                 
         }
         .padding(5)
-        .frame(width: UIScreen.main
-                .bounds.width/2.9, height: UIScreen.main
-                .bounds.height/5)
+        .frame(width: UIScreen.main.bounds.width / 2.9, height: UIScreen.main.bounds.height / 5)
         
     }
-    init(_ name:String = "Zion 2",_ image:String = "adidas", _ price:Int = 199){
+    init(_ name: String = "Zion 2", _ image: String = "adidas", _ price: Int = 199){
         self.name = name
         self.image = image
         self.price = price
     }
 }
 
-struct Preview_OtherCard:PreviewProvider{
+struct Preview_OtherCard: PreviewProvider{
     static var previews: some View{
         OtherCard()
     }
