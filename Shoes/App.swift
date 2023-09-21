@@ -9,65 +9,59 @@ import SwiftUI
 
 struct APP:View{
     
-//    @State var selected = "house"
-    @StateObject var showMenu = Storage()
-    var body: some View{
-        ZStack{
+    @StateObject private var viewModel: APPViewModel = .init()
+    @StateObject private var showMenu: Storage = .init()
+    
+    var body: some View {
+        ZStack {
             background_color.ignoresSafeArea()
                             
-            VStack{
-                ZStack{
+            VStack {
+                ZStack {
                     //to storage the curent page
-                    Home()
+                    HomeView()
                         .environmentObject(showMenu)
-                        .opacity(showMenu.currentPage == "house" ? 1 : 0)
+                        .opacity(viewModel.selectedTab == .home ? 1 : 0)
                     
                     Search()
                         .environmentObject(showMenu)
-                        .opacity(showMenu.currentPage == "magnifyingglass" ? 1 : 0)
+                        .opacity(viewModel.selectedTab == .search ? 1 : 0)
                     
                     Cart()
                         .environmentObject(showMenu)
-                        .opacity(showMenu.currentPage == "cart" ? 1 : 0)
+                        .opacity(viewModel.selectedTab == .cart ? 1 : 0)
                     
                     Liked()
                         .environmentObject(showMenu)
-                        .opacity(showMenu.currentPage == "heart" ? 1 : 0)
+                        .opacity(viewModel.selectedTab == .liked ? 1 : 0)
                     
                     Personal()
                         .environmentObject(showMenu)
-                        .opacity(showMenu.currentPage == "person" ? 1 : 0)
+                        .opacity(viewModel.selectedTab == .personal ? 1 : 0)
                     
                 }
-//                .animation(.easeIn(duration: 0.2))
                 
                 Spacer()
                 
                 //menu
-                if showMenu.showMenu {
+                if viewModel.showTabBar {
                     HStack(spacing:50){
                         
-                        ForEach(["house","magnifyingglass","cart","heart","person"],id:\.self){text in
+                        ForEach(TabItem.allCases , id: \.self) { tab in
                             ZStack {
-                                Image(systemName: text)
+                                Image(systemName: tab.rawValue)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
-                                    .frame(height:showMenu.currentPage == text ? 30 : 25)
-                                    .foregroundColor(showMenu.currentPage == text ? dark_color : .gray)
+                                    .frame(height: viewModel.selectedTab == tab ? 30 : 25)
+                                    .foregroundColor(viewModel.selectedTab == tab ? dark_color : .gray)
                                     .onTapGesture {
-//                                        withAnimation(.linear){
-                                        // changing current page
-                                        showMenu.currentPage = text
-//                                        }
+                                        viewModel.setSelectedTab(tab: tab)
                                 }
                             }
-                            
                         }
-    //
                     }
                     .padding(.top,5)
                     .padding([.bottom],40)
-                    .animation(.default)
                 }
             }
             .transition(.opacity.animation(.default))

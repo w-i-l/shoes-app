@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Category:String,Codable{
+enum Category: String, Codable {
     case running = "running"
     case basketball = "basketball"
     case lifestyle = "lifestyle"
@@ -16,8 +16,9 @@ enum Category:String,Codable{
 }
 
 
-struct Product:Hashable,Codable{
+struct Product: Identifiable, Hashable, Codable {
     
+    let id = UUID()
     let name: String
     let price: Int
     let category: Category

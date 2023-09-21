@@ -16,4 +16,8 @@ class MockedAPI {
     func getAllProducts() -> [Product] {
         return MockedData.shoesArray
     }
+    
+    func getArrivalsProducts(numberOfElements: Int) -> [Product] {
+        return Array(MockedData.shoesArray.prefix(numberOfElements))
+    }
 }
