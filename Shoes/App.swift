@@ -31,7 +31,7 @@ struct APP:View{
                         .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .cart ? 1 : 0)
                     
-                    Liked()
+                    LikedView()
                         .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .liked ? 1 : 0)
                     

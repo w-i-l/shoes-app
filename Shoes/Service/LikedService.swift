@@ -23,7 +23,7 @@ class LikedService {
         return self.likedProducts.value
     }
     
-    func isProductLiked(productID: UUID) -> Bool {
+    func isProductLiked(productID: String) -> Bool {
         return self.likedProducts.value.first { $0.id == productID } != nil
     }
     
@@ -31,7 +31,7 @@ class LikedService {
         self.likedProducts.value.append(product)
     }
     
-    func removeLikedProduct(productID: UUID) {
+    func removeLikedProduct(productID: String) {
         self.likedProducts.value.removeAll { $0.id == productID }
     }
 }

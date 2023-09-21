@@ -27,7 +27,7 @@ class HomeViewModel: ObservableObject {
         }
     }
     
-    func isProductLiked(productID: UUID) -> Bool {
+    func isProductLiked(productID: String) -> Bool {
         return LikedService.shared.isProductLiked(productID: productID)
     }
 }

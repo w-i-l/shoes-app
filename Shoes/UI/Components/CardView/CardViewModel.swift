@@ -25,7 +25,7 @@ class CardViewModel: BaseViewModel {
             .store(in: &self.bag)
     }
     
-    func isProductLiked(productID: UUID) -> Bool {
+    func isProductLiked(productID: String) -> Bool {
         LikedService.shared.isProductLiked(productID: productID)
     }
     

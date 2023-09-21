@@ -1,5 +1,5 @@
 //
-//  LikedCard.swift
+//  LikedCardView.swift
 //  Tesla
 //
 //  Created by mishu on 28.07.2022.
@@ -7,25 +7,22 @@
 
 import SwiftUI
 
-struct LikedCard: View {
+struct LikedCardView: View {
     
     
-    let text:String
-    let image:String
-    let item:Product
+    let text: String
+    let image: String
+    let product: Product
     
-    @State var movedLocation:CGFloat = .zero
-    @State var isActive = false
-    
-    @EnvironmentObject var showMenu:Storage
-    
+    @State private var movedLocation:CGFloat = .zero
+    @State private var isActive = false
     
     var body: some View {
         ZStack {
             
             //delete button
             Button(action:{
-                showMenu.liked = showMenu.liked.filter{$0.name != self.text}
+                LikedService.shared.removeLikedProduct(productID: product.id)
             }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
@@ -51,15 +48,15 @@ struct LikedCard: View {
             NavigationLink(
                 destination:
                     Item(
-                        item.name,
-                        item.price,
-                        item.imageArray,
-                        item.logo,
-                        item.subtitle,
-                        item.rating,
-                        item.reviews,
-                        item.description,
-                        item.sizes
+                        product.name,
+                        product.price,
+                        product.imageArray,
+                        product.logo,
+                        product.subtitle,
+                        product.rating,
+                        product.reviews,
+                        product.description,
+                        product.sizes
                     ).navigationBarHidden(true),
                 isActive: $isActive
             ) {
@@ -92,7 +89,6 @@ struct LikedCard: View {
                 .gesture (
                     DragGesture(minimumDistance: 15)
                         .onEnded { drag in
-                            //                        print(drag.translation.width, movedLocation)
                             withAnimation(.default) {
                                 if movedLocation==0 && drag.translation.width<0 {
                                     movedLocation = -75
@@ -103,7 +99,7 @@ struct LikedCard: View {
                         }
                 )
                 .onTapGesture {
-                    showMenu.showMenu = false
+                    AppService.shared.showTabBar.value = false
                     isActive = true
                 }
             }
@@ -114,12 +110,12 @@ struct LikedCard: View {
     init(_ text:String = "Zion 2", _ image:String="adidas") {
         self.text = text
         self.image = image
-        self.item = shoesArray.filter{$0.name == text}[0]
+        self.product = shoesArray.filter{$0.name == text}[0]
     }
 }
 
 struct Preview_LikedCard: PreviewProvider {
     static var previews: some View {
-        LikedCard()
+        LikedCardView()
     }
 }

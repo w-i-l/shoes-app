@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct Liked: View {
+struct LikedView: View {
     
-    @EnvironmentObject var showMenu: Storage
+    @StateObject private var viewModel: LikedViewModel = .init()
     
     var body: some View {
         NavigationView {
@@ -26,11 +26,11 @@ struct Liked: View {
                             
                             Spacer()
                             
-                            if !showMenu.liked.isEmpty {
+                            if !viewModel.likedProducts.isEmpty {
                                 Button(
                                     action: {
                                         withAnimation(.easeInOut) {
-                                            showMenu.liked = Array<Product>()
+                                            viewModel.removeAllLikedProducts()
                                         }
                                     }) {
                                         ZStack{
@@ -39,16 +39,16 @@ struct Liked: View {
                                                 .frame(width:100,height:40)
                                             
                                             Text("Empty list")
-                                                .foregroundColor(showMenu.liked.isEmpty ? .gray : dark_color)
+                                                .foregroundColor(viewModel.likedProducts.isEmpty ? .gray : dark_color)
                                                 .font(.system(size: 16))
-                                                .fontWeight(showMenu.liked.isEmpty ? .light : .medium)
+                                                .fontWeight(viewModel.likedProducts.isEmpty ? .light : .medium)
                                         }
                                     }
                             }
                         }
                         .padding()
                         
-                        if showMenu.liked.isEmpty {
+                        if viewModel.likedProducts.isEmpty {
                             VStack {
                                 Spacer()
                                 VStack {
@@ -68,8 +68,8 @@ struct Liked: View {
                         } else {
                             ScrollView(showsIndicators:false) {
                                 VStack {
-                                    ForEach(showMenu.liked, id:\.self) { elem in
-                                        LikedCard(elem.name, elem.imageArray[0])
+                                    ForEach(viewModel.likedProducts, id:\.self) { elem in
+                                        LikedCardView(elem.name, elem.imageArray[0])
                                     }
                                 }
                             }
@@ -86,6 +86,6 @@ struct Liked: View {
 
 struct Preview_Liked: PreviewProvider {
     static var previews: some View {
-        Liked()
+        LikedView()
     }
 }

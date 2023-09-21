@@ -1,5 +1,5 @@
 //
-//  LikedCard.swift
+//  LikedCardView.swift
 //  Tesla
 //
 //  Created by mishu on 28.07.2022.

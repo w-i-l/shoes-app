@@ -18,7 +18,9 @@ enum Category: String, Codable {
 
 struct Product: Identifiable, Hashable, Codable {
     
-    let id = UUID()
+    var id: String {
+        name + logo + subtitle
+    }
     let name: String
     let price: Int
     let category: Category
