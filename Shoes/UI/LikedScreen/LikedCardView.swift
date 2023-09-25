@@ -14,7 +14,7 @@ struct LikedCardView: View {
     let image: String
     let product: Product
     
-    @State private var movedLocation:CGFloat = .zero
+    @State private var movedLocation: CGFloat = .zero
     @State private var isActive = false
     
     var body: some View {
@@ -105,17 +105,5 @@ struct LikedCardView: View {
             }
             .offset(x:movedLocation)
         }
-    }
-    
-    init(_ text:String = "Zion 2", _ image:String="adidas") {
-        self.text = text
-        self.image = image
-        self.product = shoesArray.filter{$0.name == text}[0]
-    }
-}
-
-struct Preview_LikedCard: PreviewProvider {
-    static var previews: some View {
-        LikedCardView()
     }
 }

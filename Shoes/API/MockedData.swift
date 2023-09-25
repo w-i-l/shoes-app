@@ -23,7 +23,7 @@ let zion2 = Product(
 let nikeAir1 = Product(
     name: "Air Max 1",
     price: 159,
-    category: Category.lifestyle,
+    category: ProductCategories.lifestyle,
     logo: "nike",
     subtitle: "Men Lifestyle Shoes",
     imageArray: ["nike air 1", "nike air 1 - 2", "nike air 1 - 3"],
@@ -36,7 +36,7 @@ let nikeAir1 = Product(
 let zoomx = Product(
     name: "ZoomX Vaporfly",
     price: 169,
-    category: Category.running,
+    category: ProductCategories.running,
     logo: "nike",
     subtitle: "Men Running Shoes",
     imageArray: ["zoomx", "zoomx - 2", "zoomx - 3"],
@@ -49,7 +49,7 @@ let zoomx = Product(
 let metcon = Product(
     name: "Metcon 8",
     price: 99,
-    category: Category.gym,
+    category: ProductCategories.gym,
     logo: "nike",
     subtitle: "Men Gym Shoes",
     imageArray: ["metcon", "metcon - 2", "metcon - 3"],
@@ -62,7 +62,7 @@ let metcon = Product(
 let sb = Product(
     name: "SB Shane",
     price: 79,
-    category: Category.skateboarding,
+    category: ProductCategories.skateboarding,
     logo: "nike",
     subtitle: "Men Skateboarding Shoes",
     imageArray: ["sb", "sb - 2", "sb - 3"],
@@ -93,7 +93,7 @@ struct MockedData {
     static let nikeAir1 = Product(
         name: "Air Max 1",
         price: 159,
-        category: Category.lifestyle,
+        category: ProductCategories.lifestyle,
         logo: "nike",
         subtitle: "Men Lifestyle Shoes",
         imageArray: ["nike air 1", "nike air 1 - 2", "nike air 1 - 3"],
@@ -106,7 +106,7 @@ struct MockedData {
     static let zoomx = Product(
         name: "ZoomX Vaporfly",
         price: 169,
-        category: Category.running,
+        category: ProductCategories.running,
         logo: "nike",
         subtitle: "Men Running Shoes",
         imageArray: ["zoomx", "zoomx - 2", "zoomx - 3"],
@@ -119,7 +119,7 @@ struct MockedData {
     static let metcon = Product(
         name: "Metcon 8",
         price: 99,
-        category: Category.gym,
+        category: ProductCategories.gym,
         logo: "nike",
         subtitle: "Men Gym Shoes",
         imageArray: ["metcon", "metcon - 2", "metcon - 3"],
@@ -132,7 +132,7 @@ struct MockedData {
     static let sb = Product(
         name: "SB Shane",
         price: 79,
-        category: Category.skateboarding,
+        category: ProductCategories.skateboarding,
         logo: "nike",
         subtitle: "Men Skateboarding Shoes",
         imageArray: ["sb", "sb - 2", "sb - 3"],

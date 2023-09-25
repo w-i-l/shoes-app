@@ -26,7 +26,6 @@ struct ItemView: View {
     @State private var showingSizes = false
     
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var showMenu: Storage
     @StateObject private var viewModel: ItemViewModel = .init()
     
     var body: some View {

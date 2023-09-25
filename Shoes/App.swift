@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-struct APP:View{
+struct APP: View {
     
     @StateObject private var viewModel: APPViewModel = .init()
-    @StateObject private var showMenu: Storage = .init()
     
     var body: some View {
         ZStack {
@@ -20,23 +19,18 @@ struct APP:View{
                 ZStack {
                     //to storage the curent page
                     HomeView()
-                        .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .home ? 1 : 0)
                     
-                    Search()
-                        .environmentObject(showMenu)
+                    SearchView()
                         .opacity(viewModel.selectedTab == .search ? 1 : 0)
                     
                     CartView()
-                        .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .cart ? 1 : 0)
                     
                     LikedView()
-                        .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .liked ? 1 : 0)
                     
                     PersonalView()
-                        .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .personal ? 1 : 0)
                     
                 }

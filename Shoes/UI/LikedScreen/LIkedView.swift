@@ -69,7 +69,11 @@ struct LikedView: View {
                             ScrollView(showsIndicators:false) {
                                 VStack {
                                     ForEach(viewModel.likedProducts, id:\.self) { elem in
-                                        LikedCardView(elem.name, elem.imageArray[0])
+                                       LikedCardView(
+                                        text: elem.name,
+                                        image: elem.imageArray[0],
+                                        product: elem
+                                       )
                                     }
                                 }
                             }

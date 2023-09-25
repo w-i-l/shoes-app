@@ -1,5 +1,5 @@
 //
-//  Search.swift
+//  SearchView.swift
 //  Tesla
 //
 //  Created by mishu on 28.07.2022.
@@ -7,18 +7,11 @@
 
 import SwiftUI
 
-struct Search: View {
-
-    let categories = ["all","running","lifestyle","gym","basketball","skateboarding"]
-    let criterias = ["Price Low-High", "Price High-Low","Popularity","Newest"]
-        
-    @EnvironmentObject var showMenu:Storage
+struct SearchView: View {
     
-    @State private var textSearched = ""
-    @State private var selectedCategory = "all"
-    @State private var sortingCriteria = "Price Low-High"
     @State private var showOptions = false
-    @State private var focused = false
+    
+    @StateObject private var viewModel: SearchViewModel = .init()
 
     var body: some View {
         NavigationView {
@@ -49,7 +42,7 @@ struct Search: View {
                                     .frame(width: 30,height: 30)
                                     .padding(.leading,35)
                                    
-                                TextField("Try 'Air MAX' ", text: $textSearched)
+                                TextField("Try 'Air MAX' ", text: $viewModel.textSearched)
                                     .accentColor(.black)
                                     .padding(10)
                                     .foregroundColor(.gray)
@@ -57,11 +50,11 @@ struct Search: View {
                                     .padding(.leading, -20)
                                 
                                 //DISPLAY DELETE BUTTON
-                                if !textSearched.isEmpty {
+                                if !viewModel.textSearched.isEmpty {
                                     
                                     Button(
                                         action: {
-                                            textSearched = ""
+                                            viewModel.textSearched = ""
                                     }) {
                                         ZStack {
                                             Circle()
@@ -85,21 +78,21 @@ struct Search: View {
                         //categories
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(categories,id:\.self) { text in
+                                ForEach(ProductCategories.allCases, id: \.self) { category in
                                     
                                     Button(action:{
-                                            selectedCategory = text
+                                        viewModel.selectedCategory = category
                                     }) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 20)
                                                 
-                                                .fill(selectedCategory==text ? gray1 : background_color)
+                                                .fill(viewModel.selectedCategory == category ? gray1 : background_color)
                                                 .frame(width: 125, height: 27)
                                                 .overlay(RoundedRectangle(cornerRadius: 20).stroke(dark_color,lineWidth: 0.2))
                                                 .padding([.top,.bottom], 5)
 
-                                            Text(text)
-                                                .foregroundColor(selectedCategory == text ? dark_color : .gray)
+                                            Text(category.rawValue)
+                                                .foregroundColor(viewModel.selectedCategory == category ? dark_color : .gray)
                                                 .font(.system(size: 17))
                                         }
                                     }
@@ -118,33 +111,36 @@ struct Search: View {
                                 }
                             )
                             {
-                                DisclosureGroup("Sort by",isExpanded: $showOptions){
-                                    ForEach(criterias,id:\.self){text in
-                                        HStack {
-                                            Text(text)
-                                                .foregroundColor(sortingCriteria == text ? dark_color : Color(red: 0.7, green: 0.7, blue: 0.7))
-                                                .font(.system(size: 15))
-                                                .fontWeight(.light)
-                                                .onTapGesture(){
-                                                    //CHANGING SORTING CRTITERIA
-                                                    sortingCriteria = text
-                                                    withAnimation(.easeIn) {
-                                                        showOptions.toggle()
+                                HStack {
+                                    DisclosureGroup("Sort by", isExpanded: $showOptions){
+                                        ForEach(SortingCriteria.allCases, id: \.self){ criteria in
+                                            HStack {
+                                                Text(criteria.rawValue)
+                                                    .foregroundColor(viewModel.sortingCriteria == criteria ? dark_color : Color(red: 0.7, green: 0.7, blue: 0.7))
+                                                    .font(.system(size: 15))
+                                                    .fontWeight(.light)
+                                                    .onTapGesture(){
+                                                        //CHANGING SORTING CRTITERIA
+                                                        viewModel.sortingCriteria = criteria
+                                                        withAnimation(.easeIn) {
+                                                            showOptions.toggle()
+                                                        }
                                                     }
-                                                }
-                                            Spacer()
+                                                Spacer()
+                                            }
+                                            .padding(.leading)
                                         }
-                                        .padding(.leading)
+                                        .padding(5)
                                     }
-                                    .padding(5)
-                                }
-                                .accentColor(dark_color)
-                                .foregroundColor(dark_color)
-                                
-                                Text(sortingCriteria)
+                                    .accentColor(dark_color)
                                     .foregroundColor(dark_color)
-                                    .fontWeight(.semibold)
-                                    .font(.system(size: 18))
+                                    
+                                    Text(viewModel.sortingCriteria.rawValue)
+                                        .foregroundColor(dark_color)
+                                        .fontWeight(.semibold)
+                                        .font(.system(size: 18))
+                                }
+                                .padding(.horizontal, 20)
                             }
                             .foregroundColor(dark_color)
                             .padding()
@@ -153,17 +149,17 @@ struct Search: View {
                         //products
                         ScrollView(showsIndicators:false) {
                             VStack {
-                                if !arrayToShow.isEmpty {
-                                    ForEach(Array(stride(from:0,to:arrayToShow.count,by:2)),id:\.self) { no in
+                                if !viewModel.arrayToShow.isEmpty {
+                                    ForEach(Array(stride(from:0, to:viewModel.arrayToShow.count, by:2)),id: \.self) { no in
                                         HStack(spacing:10) {
                                             
-                                            let firstCard = arrayToShow[no]
+                                            let firstCard = viewModel.arrayToShow[no]
                                             
                                             CardView(product: firstCard)
 
                                             //TO SIPLAY ON THE SECOND COLUMN
-                                            if no+1<arrayToShow.count{
-                                                let secondCard = arrayToShow[no + 1]
+                                            if no+1<viewModel.arrayToShow.count{
+                                                let secondCard = viewModel.arrayToShow[no + 1]
                                                 CardView(product: secondCard)
 
                                             }
@@ -193,39 +189,10 @@ struct Search: View {
         }
         .padding([.leading,.trailing], -10)
     }
-    
-    var arrayToShow:[Product] {
-        
-        if !textSearched.isEmpty {
-            //SORT USING THE WORD SEARCHED FOR
-            if !shoesArray.filter({$0.name.lowercased().starts(with: textSearched.lowercased())}).isEmpty {
-                return shoesArray.filter{$0.name.lowercased().starts(with: textSearched.lowercased())}
-            }
-        } else {
-            //SORTING USING CRITERIA
-            if selectedCategory == "all"{
-                
-                if sortingCriteria == "Price Low-High" {
-                    return shoesArray.sorted{$0.price < $1.price}
-                } else if (sortingCriteria == "Price High-Low") {
-                    return shoesArray.sorted{$0.price > $1.price}
-                } else if (sortingCriteria == "Popularity") {
-                    return shoesArray.sorted{$0.rating > $1.rating}
-                } else if (sortingCriteria == "Newest") {
-                    return shoesArray.sorted{$0.reviews > $1.reviews}
-                }
-            } else {
-                return shoesArray.filter({selectedCategory == $0.category.rawValue})
-            }
-        }
-        
-       return [Product]()
-    }
-    
 }
 
 struct Preview_Search: PreviewProvider {
     static var previews: some View {
-        Search()
+        SearchView()
     }
 }

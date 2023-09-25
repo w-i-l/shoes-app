@@ -10,7 +10,6 @@ import SwiftUI
 struct InformationalView: View {
     
     @Environment(\.dismiss) var dismiss
-    @EnvironmentObject var showMenu: Storage
     
     var body: some View {
         ZStack {
@@ -24,7 +23,7 @@ struct InformationalView: View {
                         action: {
                         
                         dismiss()
-                        showMenu.showMenu = true
+                            AppService.shared.showTabBar.value = true
                         
                     }) {
                         Image(systemName: "arrow.left")

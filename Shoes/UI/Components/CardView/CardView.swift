@@ -38,7 +38,6 @@ struct CardView: View {
                 RoundedRectangle(cornerRadius: 20)
                     .fill(gray2)
                     .frame(width: UIScreen.main.bounds.width / 2.5, height: UIScreen.main.bounds.width / 2.5)
-                    .innerShadow(color: gray2)
                 
                 // info
                 VStack{

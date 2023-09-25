@@ -7,13 +7,6 @@
 
 import Foundation
 
-enum Category: String, Codable {
-    case running = "running"
-    case basketball = "basketball"
-    case lifestyle = "lifestyle"
-    case gym = "gym"
-    case skateboarding = "skateboarding"
-}
 
 
 struct Product: Identifiable, Hashable, Codable {
@@ -23,7 +16,7 @@ struct Product: Identifiable, Hashable, Codable {
     }
     let name: String
     let price: Int
-    let category: Category
+    let category: ProductCategories
     let logo: String
     let subtitle: String
     let imageArray: [String]
