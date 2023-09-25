@@ -41,29 +41,9 @@ struct AddCard: View {
                     Button(
                         action:{
                             //only if the input are valid
-                            if value.cardNumber.count == 16 && value.holderName.count > 8 && value.expirationDate.count == 4 && Int(value.expirationDate)! <= 1299 {
+                            if value.cardNumber.count == 16 && value.holderName.count > 8 {
                                 
-                                showMenu.creditCards.append(CreditCard(
-                                    LinearGradient(
-                                        colors: [
-                                            Color(
-                                                red: Double.random(in: 0...1),
-                                                green: Double.random(in: 0...1),
-                                                blue: Double.random(in: 0...1)
-                                            ),
-                                            Color(
-                                                red: Double.random(in: 0...1),
-                                                green: Double.random(in: 0...1),
-                                                blue: Double.random(in: 0...1)
-                                            )
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    value.cardNumber,
-                                    value.holderName,
-                                    value.expirationDate
-                                ))
+                                showMenu.creditCards.append(CreditCardView(creditCardModel: CreditCardModel()))
                                 
                                 dismiss()
                             }
@@ -87,17 +67,8 @@ struct AddCard: View {
                 }
                 
                 
-                CreditCard(
-                    LinearGradient(
-                        colors: [.gray, dark_color],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    value.cardNumber,
-                    value.holderName,
-                    value.expirationDate
-                )
-                    .id([value.cardNumber, value.holderName, value.expirationDate])
+                CreditCardView(creditCardModel: CreditCardModel())
+                    .id([value.cardNumber, value.holderName])
                     .padding(.bottom,30)
                     .padding(.top,10)
                 
@@ -125,7 +96,7 @@ struct AddCard: View {
                                             .font(.system(size: 16))
                                             .fontWeight(.thin)
                                             .foregroundColor(red_pastel)
-                                    } else if elem.0 == "Expiration Date (MM/YY)" && value.expirationDate.count < 6 && Int(value.expirationDate) ?? 0 > 1299 && value.expirationDate != " " {
+                                    } else if elem.0 == "Expiration Date (MM/YY)" {
                                         Text("Incorect expiration date")
                                             .font(.system(size: 16))
                                             .fontWeight(.thin)
@@ -140,16 +111,12 @@ struct AddCard: View {
                                         .frame(width: UIScreen.main.bounds.width - 40, height: 50)
                                         .padding(.horizontal)
                                     
-                                    TextField("",text:elem.1)
+                                    TextField("", text: elem.1)
                                         .foregroundColor(dark_color)
                                         .padding(.horizontal,20)
                                         .keyboardType( (elem.0 == "Card number" || elem.0 == "Expiration Date (MM/YY)") ? .numberPad : .alphabet)
                                         .disableAutocorrection(true)
                                         .frame(width: UIScreen.main.bounds.width - 40, height: 50)
-                                    
-                                    
-                                    
-                                    
                                 }
                             }
                         }
@@ -159,9 +126,9 @@ struct AddCard: View {
         }
         //dismiss gesture
         .gesture(
-            DragGesture(minimumDistance:20)
-                .onChanged{el in
-                    if el.translation.width > 0 && el.startLocation.x < UIScreen.main.bounds.width/6{
+            DragGesture(minimumDistance: 20)
+                .onChanged { drag in
+                    if drag.translation.width > 0 && drag.startLocation.x < UIScreen.main.bounds.width / 6{
                         // sa ii fac drag effect
                         dismiss()
                     }

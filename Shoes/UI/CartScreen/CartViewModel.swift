@@ -23,20 +23,18 @@ class CartViewModel: BaseViewModel {
         CartService.shared.cartProducts
             .receive(on: DispatchQueue.main)
             .sink { [weak self] cartProducts in
-                for product in cartProducts {
-                    self?.cartProducts[product] = 1
-                }
+                self?.cartProducts = cartProducts
             }
             .store(in: &self.bag)
     }
     
     func clearCart() {
-        CartService.shared.cartProducts.value = []
+        CartService.shared.cartProducts.value = [:]
         self.cartProducts = [:]
     }
     
     func removeProduct(product: Product) {
         self.cartProducts[product] = nil
-        CartService.shared.removeProduct(productID: product.id)
+        CartService.shared.removeProduct(product: product)
     }
 }

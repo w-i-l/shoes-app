@@ -1,5 +1,5 @@
 //
-//  Checkout.swift
+//  CheckoutView.swift
 //  Shoes
 //
 //  Created by mishu on 22.08.2022.
@@ -7,18 +7,10 @@
 
 import SwiftUI
 
-struct Checkout: View {
+struct CheckoutView: View {
     
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject var showMenu: Storage
-    
-    @State private var street: String = " "
-    @State private var number: String = " "
-    @State private var town: String = " "
-    @State private var region: String = " "
-    @State private var country: String = " "
-    @State private var isExpended: Bool = false
-    @State private var paymentMethod: String = "cash"
+    @StateObject var viewModel: CheckoutViewModel
     
     var body: some View {
         ZStack {
@@ -67,7 +59,10 @@ struct Checkout: View {
                     }
                     .padding()
                     
-                    ForEach(Array(zip(["Street", "Number", "Town", "Region", "Country"],[$street, $number, $town, $region, $country])),id: \.0)  { elem in
+                    ForEach(Array(zip(
+                        ["Street", "Number", "Town", "Region", "Country"],
+                        [$viewModel.street, $viewModel.number, $viewModel.town, $viewModel.region, $viewModel.country]
+                    )),id: \.0)  { elem in
                         VStack {
                             HStack {
                                 Text(elem.0)
@@ -84,9 +79,9 @@ struct Checkout: View {
                             ZStack {
                                 
                                 RoundedRectangle(cornerRadius: 20)
-                                    .stroke(elem.1.wrappedValue.isEmpty ? red_pastel : gray2,lineWidth:2)
+                                    .stroke(elem.1.wrappedValue.isEmpty ? red_pastel : gray2, lineWidth: 2)
                                 
-                                TextField("",text:elem.1)
+                                TextField("", text: elem.1)
                                     .foregroundColor(dark_color)
                                     .frame(height: 40)
                                     .font(.system(size: 20))
@@ -117,18 +112,18 @@ struct Checkout: View {
                     .padding(.top,30)
                     
                     HStack {
-                        ForEach(["Cash","Card"],id:\.self) { elem in
+                        ForEach(PaymentMethod.allCases, id: \.self) { elem in
                             Button {
-                                paymentMethod = elem.lowercased()
+                                viewModel.paymentMethod = elem
                             } label: {
                                 ZStack {
                                     
                                     RoundedRectangle(cornerRadius: 20)
-                                        .stroke(elem.lowercased() == paymentMethod ? dark_color: gray2, lineWidth:  2)
+                                        .stroke(elem == viewModel.paymentMethod ? dark_color: gray2, lineWidth:  2)
                                         .frame(height:50)
                                     
-                                    Text(elem)
-                                        .foregroundColor(elem.lowercased() == paymentMethod ? dark_color: gray1)
+                                    Text(elem.rawValue.capitalized)
+                                        .foregroundColor(elem == viewModel.paymentMethod ? dark_color: gray1)
                                         .fontWeight(.medium)
                                         .font(.system(size: 20))
                                 }
@@ -143,14 +138,14 @@ struct Checkout: View {
                 
                 Button {
                     
-                    for x in [street,number,town,region,country] {
+                    for x in [viewModel.street, viewModel.number, viewModel.town, viewModel.region, viewModel.country] {
                         if x.isEmpty || x == " " {
                             return
                         }
                     }
                     
-                    showMenu.purchased.append((showMenu.cart,[street,number,town,region,country,paymentMethod]))
-                    showMenu.cart = [Product:Int]()
+                    viewModel.addOrder()
+                    CartService.shared.cartProducts.value = [:]
                     dismiss()
                     
                 } label: {
@@ -177,6 +172,6 @@ struct Checkout: View {
 
 struct CheckOut_Preview:PreviewProvider{
     static var previews: some View{
-        Checkout()
+        CheckoutView(viewModel: CheckoutViewModel(cartProducts: [:]))
     }
 }

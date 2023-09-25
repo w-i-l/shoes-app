@@ -10,7 +10,7 @@ import Combine
 
 class CartService {
     
-    var cartProducts: CurrentValueSubject<[Product], Never> = .init([])
+    var cartProducts: CurrentValueSubject<[Product: Int], Never> = .init([:])
     
     static let shared = CartService()
     
@@ -19,16 +19,24 @@ class CartService {
     }
     
     func addProduct(product: Product) {
-        if self.cartProducts.value.first(where: { $0.id == product.id }) == nil {
-            self.cartProducts.value.append(product)
+        if self.cartProducts.value.keys.first(where: { $0.id == product.id }) != nil {
+            self.cartProducts.value[product]! += 1
+        } else {
+            self.cartProducts.value[product] = 1
         }
     }
     
-    func removeProduct(productID: String) {
-        self.cartProducts.value.removeAll { $0.id == productID}
+    func removeProduct(product: Product) {
+        if self.cartProducts.value.keys.map({ $0.id }).contains(product.id) {
+            if self.cartProducts.value[product]! > 1 {
+                self.cartProducts.value[product]! -= 1
+            } else {
+                self.cartProducts.value[product] = nil
+            }
+        }
     }
     
     func isProductInCart(productID: String) -> Bool {
-        return self.cartProducts.value.first { $0.id == productID } != nil
+        return self.cartProducts.value.keys.map { $0.id }.first { $0 == productID } != nil
     }
 }

@@ -1,5 +1,5 @@
 //
-//  OrderItem.swift
+//  OrderItemView.swift
 //  Tesla
 //
 //  Created by mishu on 16.08.2022.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct OrderItem: View {
+struct OrderItemView: View {
     
     let text: String
     let image: String
-    let item: Product
     let pieces: Int
+    let item: Product
     
     var body: some View {
         ZStack {
@@ -50,12 +50,4 @@ struct OrderItem: View {
             
         }
     }
-    
-    init(_ text:String = "Zion 2", _ image:String="adidas",_ pieces:Int = 0){
-        self.text = text
-        self.image = image
-        self.item = shoesArray.filter{$0.name == text}[0]
-        self.pieces = pieces
-    }
-    
 }

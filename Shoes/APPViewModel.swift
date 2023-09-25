@@ -31,7 +31,7 @@ class APPViewModel: BaseViewModel {
         AppService.shared.showTabBar
             .receive(on: DispatchQueue.main)
             .sink { [weak self] showTabBar in
-                self?.showTabBar
+                self?.showTabBar = showTabBar
             }
             .store(in: &self.bag)
     }

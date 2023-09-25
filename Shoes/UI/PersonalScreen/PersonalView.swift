@@ -1,5 +1,5 @@
 //
-//  Personal.swift
+//  PersonalView.swift
 //  Tesla
 //
 //  Created by mishu on 28.07.2022.
@@ -7,14 +7,11 @@
 
 import SwiftUI
 
-struct Personal: View {
+struct PersonalView: View {
     
-    @EnvironmentObject var showMenu:Storage
-
-    @State var ofsett: CGFloat = .zero
-    @State var distance: CGFloat = .zero
-    
-    let cardWidth = CreditCard().width()
+    @State private var ofsett: CGFloat = .zero
+    @State private var distance: CGFloat = .zero
+    @StateObject private var viewModel: PersonalViewModel = .init()
     
     var body: some View {
         NavigationView {
@@ -24,7 +21,7 @@ struct Personal: View {
                 
                 VStack {
                     
-                    showMenu.selectedCard
+                    CreditCardView(creditCardModel: viewModel.selectedCard)
                     
                     ZStack {
                         RoundedRectangle(cornerRadius: 50)
@@ -49,7 +46,7 @@ struct Personal: View {
                             
                            
                             
-                            NavigationLink(destination:{LastPurchased().navigationBarHidden(true)}) {
+                            NavigationLink(destination:{LastPurchasedView(viewModel: viewModel).navigationBarHidden(true)}) {
                                 Text("Last purchases")
                                     .foregroundColor(dark_color)
                                     .font(.system(size: 20))
@@ -91,6 +88,6 @@ struct Personal: View {
 
 struct Preview_Personal: PreviewProvider {
     static var previews: some View {
-        Personal()
+        PersonalView()
     }
 }

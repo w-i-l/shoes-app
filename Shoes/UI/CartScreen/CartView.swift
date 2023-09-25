@@ -111,7 +111,7 @@ struct CartView: View {
             }
         }
         .sheet(isPresented: $showingCheckout) {
-            Checkout()
+            CheckoutView(viewModel: CheckoutViewModel(cartProducts: viewModel.cartProducts))
         }
     }
 }

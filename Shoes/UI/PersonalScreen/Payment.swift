@@ -61,7 +61,7 @@ struct Payment: View {
                 
                 ScrollView(showsIndicators:false) {
                     VStack() {
-                        ForEach(showMenu.creditCards,id:\.self.cardNumber) { elem in
+                        ForEach(showMenu.creditCards, id: \.self.creditCardModel.cardNumber) { elem in
                             Button(
                                 action:{
                                     showMenu.selectedCard = elem

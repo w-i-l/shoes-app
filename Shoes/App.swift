@@ -35,7 +35,7 @@ struct APP:View{
                         .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .liked ? 1 : 0)
                     
-                    Personal()
+                    PersonalView()
                         .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .personal ? 1 : 0)
                     

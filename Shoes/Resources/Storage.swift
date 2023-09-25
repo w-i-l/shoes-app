@@ -21,8 +21,8 @@ class Storage:ObservableObject{
         }
     }
     @Published var purchased:Array<(Dictionary<Product,Int>,[String])> = Array<(Dictionary<Product,Int>,Array<String>)>()
-    @Published var creditCards:[CreditCard] = [CreditCard(),CreditCard(gradients[0],"4534 5467 1234 5367","Michel G. Hylnet","04/23"),CreditCard(gradients[2],"4354 8263 8123 7436","Koli H. Detra","06/29")]
-    @Published var selectedCard:CreditCard = CreditCard()
+    @Published var creditCards:[CreditCardView] = [CreditCardView(creditCardModel: CreditCardModel()),CreditCardView(creditCardModel: CreditCardModel())]
+    @Published var selectedCard:CreditCardView = CreditCardView(creditCardModel: CreditCardModel())
     
     init(){
         

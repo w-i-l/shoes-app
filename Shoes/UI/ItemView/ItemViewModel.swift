@@ -8,7 +8,7 @@
 import SwiftUI
 
 class ItemViewModel: BaseViewModel {
-    @Published var cartProducts: [Product] = []
+    @Published var cartProducts: [Product: Int] = [:]
     
     override init() {
         
@@ -26,8 +26,8 @@ class ItemViewModel: BaseViewModel {
         CartService.shared.addProduct(product: product)
     }
     
-    func removeProduct(productID: String) {
-        CartService.shared.removeProduct(productID: productID)
+    func removeProduct(product: Product) {
+        CartService.shared.removeProduct(product: product)
     }
     
     func isProductInCart(productID: String) -> Bool {

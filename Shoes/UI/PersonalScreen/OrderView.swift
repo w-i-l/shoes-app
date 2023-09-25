@@ -1,5 +1,5 @@
 //
-//  Order.swift
+//  OrderView.swift
 //  Tesla
 //
 //  Created by mishu on 16.08.2022.
@@ -7,18 +7,17 @@
 
 import SwiftUI
 
-struct Order: View {
+struct OrderView: View {
     
     @Environment(\.dismiss) var dismiss
     
-    let orderArray: Dictionary<Product,Int>
-    let details: [String]
+    let order: OrderModel
     
-    var price: Double {
+    private var price: Double {
         
         get {
             var suma: Double = 0
-            for x in orderArray {
+            for x in order.cartItems {
                 suma += Double(x.key.price) * Double(x.value)
             }
             return suma
@@ -51,20 +50,28 @@ struct Order: View {
                 
                 ScrollView(showsIndicators: false) {
                     
-                    ForEach(orderArray.sorted(by: {$0.key.name>$1.key.name}),id:\.key) { key,value in
-                        OrderItem(key.name, key.imageArray[0], value)
+                    ForEach(order.cartItems.sorted { $0.key.name > $1.key.name } ,id: \.key) { item in
+                        OrderItemView(
+                            text: item.key.name,
+                            image: item.key.imageArray[0],
+                            pieces: item.value,
+                            item: item.key
+                            )
                         Divider()
                     }
                     
-                    Text(String(format:"Total: %.1f",price)+"$")
+                    Text(String(format:"Total: %.1f", price)+"$")
                         .foregroundColor(dark_color)
                         .font(.system(size: 24))
                         .fontWeight(.regular)
                         .padding()
                     
-                    ForEach(Array(zip(["Street","Number","Town","Region","Country","Payment method"],details)),id:\.self.0) { elem in
+                    ForEach(Array(zip(
+                        ["Street","Number","Town","Region","Country","Payment method"],
+                        [order.street, order.number, order.town, order.region, order.country, order.paymentMethod.rawValue]
+                    )), id: \.self.0) { elem in
                         HStack {
-                            Text(elem.0+"   :   "+elem.1)
+                            Text("\(elem.0)  :  \(elem.1)")
                                 .foregroundColor(dark_color)
                                 .font(.system(size: 20))
                                 .fontWeight(.light)
@@ -92,6 +99,14 @@ struct Order: View {
 
 struct PrevieR: PreviewProvider {
     static var previews: some View {
-        Order(orderArray: [zion2:3], details: [" 2","3 ","4","5","5","5"])
+        OrderView(order: OrderModel(
+            street: "",
+            number: "",
+            town: "",
+            region: "",
+            country: "",
+            paymentMethod: .cash,
+            cartItems: [:]
+        ))
     }
 }

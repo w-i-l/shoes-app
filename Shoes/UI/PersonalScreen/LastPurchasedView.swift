@@ -7,11 +7,10 @@
 
 import SwiftUI
 
-struct LastPurchased: View {
-    
-    
-    @EnvironmentObject var showMenu: Storage
-    @Environment(\.dismiss) var dismiss
+struct LastPurchasedView: View {
+
+    @Environment(\.dismiss) private var dismiss
+    @ObservedObject var viewModel: PersonalViewModel
     
     var body: some View {
         ZStack {
@@ -20,8 +19,10 @@ struct LastPurchased: View {
             NavigationView {
                 ZStack {
                     background_color.ignoresSafeArea()
+                    
                     VStack {
-                        //back button
+                        
+                        // back button
                         HStack {
                             Button(
                                 action: {
@@ -40,24 +41,25 @@ struct LastPurchased: View {
                         
                         Spacer()
                         
-                        if !showMenu.purchased.isEmpty {
+                        if !viewModel.orders.isEmpty {
                             ScrollView(showsIndicators: false) {
-                                ForEach(showMenu.purchased,id:\.self.0) { elem in
-                                    NavigationLink(destination:Order(orderArray: elem.0, details: elem.1).navigationBarHidden(true)) {
+                                ForEach(Array(stride(from: viewModel.orders.count - 1, to: -1, by: -1)), id: \.self) { no in
+                                    let elem = viewModel.orders[no]
+                                    NavigationLink(destination: OrderView(order: elem).navigationBarHidden(true)) {
                                         ZStack {
                                             RoundedRectangle(cornerRadius: 10)
                                                 .fill(gray2)
                                                 .frame(width: UIScreen.main.bounds.width - 40, height: 100)
                                             
                                             HStack {
-                                                Text("Order no.\(showMenu.purchased.firstIndex(where:{$0 == elem})!)")
+                                                Text("Order no.\(no)")
                                                     .foregroundColor(dark_color)
                                                     .font(.system(size: 24))
                                                     .fontWeight(.regular)
                                                 
                                                 Spacer()
                                                 
-                                                Image(elem.0.first!.key.imageArray[0])
+                                                Image(elem.cartItems.first!.key.imageArray[0])
                                                     .resizable()
                                                     .aspectRatio(contentMode: .fit)
                                                     .frame(width: 75, height: 75)
@@ -97,6 +99,6 @@ struct LastPurchased: View {
 
 struct preview:PreviewProvider{
     static var previews: some View{
-        LastPurchased()
+        LastPurchasedView(viewModel: PersonalViewModel())
     }
 }
