@@ -1,12 +1,12 @@
 //
-//  Item.swift
+//  ItemView.swift
 //  Tesla
 //
 //  Created by mishu on 28.07.2022.
 //
 import SwiftUI
 
-struct Item: View {
+struct ItemView: View {
     
     let name: String
     let price: Int
@@ -19,14 +19,15 @@ struct Item: View {
     let sizes: [Int]
     let item: Product
     
-    @State var selectedImage: String = ""
-    @State var selectedSize = 41
-    @State var ofset = CGFloat.zero
-    @State var showingSheet = false
-    @State var showingSizes = false
+    @State private var selectedImage: String = ""
+    @State private var selectedSize = 41
+    @State private var ofset = CGFloat.zero
+    @State private var showingSheet = false
+    @State private var showingSizes = false
     
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var showMenu: Storage
+    @StateObject private var viewModel: ItemViewModel = .init()
     
     var body: some View {
         
@@ -41,7 +42,7 @@ struct Item: View {
                         action: {
                             
                             dismiss()
-                            showMenu.showMenu = true
+                            AppService.shared.showTabBar.value = true
                             
                         }) {
                             Image(systemName: "arrow.left")
@@ -55,10 +56,10 @@ struct Item: View {
                     Spacer()
                 }
                 
-                // BODY
+                // body
                 ScrollView(showsIndicators:false) {
                     HStack {
-                        //NAME
+                        // name
                         Text(name)
                             .foregroundColor(dark_color)
                             .font(.system(size: 32))
@@ -73,7 +74,7 @@ struct Item: View {
                     }
                     .padding()
                     
-                    //SHOES CATEGORY
+                    // shoes category
                     HStack {
                         Text(category)
                             .foregroundColor(.gray)
@@ -85,7 +86,7 @@ struct Item: View {
                     .padding()
                     .padding(.top, self.name.count > 10 ? -40 : -60)
                     
-                    //big image
+                    // main image
                     Image(selectedImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -94,7 +95,7 @@ struct Item: View {
                         .padding([.trailing,.bottom,.top], 20)
                     
                     
-                    // IMAGE SELECTOR
+                    // image gallery
                     HStack(spacing:30) {
                         ForEach(imageArray,id:\.self) { image in
                             Button(
@@ -122,7 +123,7 @@ struct Item: View {
                         }
                     }
                     
-                    //rating
+                    // rating
                     HStack {
                         Text(String.init(format: "%.1f/5", stars))
                             .foregroundColor(dark_color)
@@ -148,7 +149,7 @@ struct Item: View {
                         showingSheet = true
                     }
                     
-                    //DISPLAY THE FEEDBACK HUB
+                    // feedback hub
                     .sheet(isPresented: $showingSheet) {
                         Reviews(reviews)
                             .onTapGesture {
@@ -156,7 +157,7 @@ struct Item: View {
                             }
                     }
                     
-                    //description
+                    // description
                     Text(description)
                         .foregroundColor(dark_color)
                         .font(.system(size: 14))
@@ -164,7 +165,7 @@ struct Item: View {
                         .padding()
                         .multilineTextAlignment(.leading)
                     
-                    //sizes
+                    // sizes
                     HStack(spacing:30) {
                         ForEach(0..<(sizes.count > 4 ? 4 : sizes.count)) { no in
                             Button(action:{
@@ -208,7 +209,7 @@ struct Item: View {
                                 
                             }
                             .padding(.top, -10)
-                            //DISPLAYING SIZES HUB
+                            // size hub
                             .onTapGesture {
                                 showingSizes = true
                             }
@@ -233,7 +234,7 @@ struct Item: View {
             }
             
             
-            //buy widget
+            // 	buy widget
             VStack {
                 
                 Spacer()
@@ -254,8 +255,8 @@ struct Item: View {
                                 .blur(radius: 1)
                         )
                     
-                    //IF THE ITEM IS NOT IN CART
-                    if !Array(showMenu.cart.keys).contains(item) {
+                    // if the product is not in cart
+                    if !viewModel.isProductInCart(productID: item.id) {
                         HStack() {
                             
                             Text("\(price)$")
@@ -268,8 +269,7 @@ struct Item: View {
                             //buy
                             Button(
                                 action: {
-                                //ADD TO CART
-                                showMenu.cart[shoesArray.filter{$0.name == self.name}[0]] = 1
+                                    viewModel.addProduct(product: item)
                             }) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 30)
@@ -286,7 +286,7 @@ struct Item: View {
                         }
                         .padding([.leading,.trailing], 25)
                     }
-                    //IF IT IS TO CART
+                    // if the product is in the cart
                     else {
                         HStack {
                             Text("Added")
@@ -297,9 +297,9 @@ struct Item: View {
                             Spacer()
                             
                             Button(action:{
-                                //GO TO CART PAGE
-                                showMenu.currentPage = "cart"
-                                showMenu.showMenu = true
+                                // go to cart screen
+                                AppService.shared.setSelectedTab(tab: .cart)
+                                AppService.shared.showTabBar.value = true
                             }){
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 30)
@@ -314,12 +314,6 @@ struct Item: View {
                         }
                         .padding(.horizontal, 25)
                     }
-                    
-                    
-                    
-                    
-                    
-                    
                 }
                 .frame(width: UIScreen.main.bounds.width - 40, height: 80)
                 .padding(.bottom, 20)
@@ -329,13 +323,13 @@ struct Item: View {
             
         }
         .ignoresSafeArea(edges: .bottom)
-        //GO BACK GESTURE
+        // back gesture
         .gesture(
             DragGesture(minimumDistance: 20)
                 .onChanged{el in
                     if el.translation.width > 0 && el.startLocation.x < UIScreen.main.bounds.width / 6{
                         // sa ii fac drag effect
-                        showMenu.showMenu = true
+                        AppService.shared.showTabBar.value = true
                         dismiss()
                     }
                 }
@@ -363,6 +357,6 @@ struct Item: View {
 
 struct Preview_Item:PreviewProvider {
     static var previews: some View {
-        Item()
+        ItemView()
     }
 }

@@ -1,5 +1,5 @@
 //
-//  Cart.swift
+//  CartView.swift
 //  Tesla
 //
 //  Created by mishu on 28.07.2022.
@@ -7,24 +7,11 @@
 
 import SwiftUI
 
-struct Cart: View {
+struct CartView: View {
     
+    @State private var showingCheckout: Bool = false
     
-    @EnvironmentObject var showMenu: Storage
-    @State var showingCheckout: Bool = false
-    
-    //TOTAL PRICE OF CART'S ITEMS
-    var price: Double {
-        
-        get {
-            
-            var suma: Double = 0
-            for x in showMenu.cart {
-                suma += Double(x.key.price) * Double(x.value)
-            }
-            return suma
-        }
-    }
+    @StateObject private var viewModel: CartViewModel = .init()
     
     var body: some View {
         ZStack {
@@ -41,17 +28,17 @@ struct Cart: View {
                     
                     VStack {
                         
-                        //TOTAL PRICE
-                        Text(String(format:"%.2f",price)+"$")
-                            .foregroundColor(showMenu.cart.isEmpty ? gray1 : .gray)
+                        // total price
+                        Text(String(format:"%.2f", viewModel.price)+"$")
+                            .foregroundColor(viewModel.cartProducts.isEmpty ? gray1 : .gray)
                             .font(.system(size: 18))
                             .fontWeight(.light)
                     }
                 }
                 .padding()
                 
-                //CART IS EMPTY
-                if showMenu.cart.isEmpty {
+                // cart is empty
+                if viewModel.cartProducts.isEmpty {
                     
                     Spacer()
                 
@@ -63,22 +50,27 @@ struct Cart: View {
                     } else {
                     
                     
-                    //DISPLAYIG THE MATCHED ITEMS
+                    // displaying items
                     ScrollView(showsIndicators:false) {
-                        ForEach(Array(showMenu.cart.keys),id:\.self) { elem in
+                        ForEach(Array(viewModel.cartProducts.keys), id: \.self) { elem in
                             
-                            CartItem(elem.name, elem.imageArray[0])
+                            CartItemView(
+                                text: elem.name,
+                                image: elem.imageArray[0],
+                                item: elem,
+                                viewModel: viewModel
+                            )
                             
                             Divider()
                                 .padding([.horizontal])
-                                .opacity(elem == Array(showMenu.cart.keys).last ? 0 : 1)
+                                .opacity(elem == Array(viewModel.cartProducts.keys).last ? 0 : 1)
                         }
                         
                         HStack {
-                            //clear cart
+                            // clear cart
                             Button(
                                 action: {
-                                    showMenu.cart = [Product:Int]()
+                                    viewModel.clearCart()
                             }) {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 20)
@@ -92,7 +84,7 @@ struct Cart: View {
                                 }
                             }
                             
-                            //checkout
+                            // checkout
                             Button(
                                 action: {
                                     showingCheckout = true
@@ -126,6 +118,6 @@ struct Cart: View {
 
 struct Preview_Cart: PreviewProvider {
     static var previews: some View {
-        Cart()
+        CartView()
     }
 }

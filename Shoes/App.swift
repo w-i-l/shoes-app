@@ -27,7 +27,7 @@ struct APP:View{
                         .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .search ? 1 : 0)
                     
-                    Cart()
+                    CartView()
                         .environmentObject(showMenu)
                         .opacity(viewModel.selectedTab == .cart ? 1 : 0)
                     

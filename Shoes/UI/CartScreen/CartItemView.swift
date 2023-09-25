@@ -7,15 +7,13 @@
 
 import SwiftUI
 
-struct CartItem: View {
-    
-    
+struct CartItemView: View {
     let text: String
     let image: String
-    @State var movedLocation: CGFloat = .zero
     let item: Product
     
-    @EnvironmentObject var showMenu: Storage
+    @State private var movedLocation: CGFloat = .zero
+    @ObservedObject var viewModel: CartViewModel
     
     
     var body: some View {
@@ -24,7 +22,7 @@ struct CartItem: View {
             //delete button
             Button(action:{
                 //delete from cart colection
-                showMenu.cart[shoesArray.filter{$0.name == text}[0]] = nil
+                viewModel.removeProduct(product: item)
             }) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 20)
@@ -66,7 +64,7 @@ struct CartItem: View {
                             
                             Button(
                                 action: {
-                                    showMenu.cart[item]! += 1
+                                    viewModel.cartProducts[item]! += 1
                                 }) {
                                     ZStack {
                                         Circle()
@@ -79,17 +77,17 @@ struct CartItem: View {
                                     }
                                 }
                             
-                            Text("\(showMenu.cart[item] ?? 0)")
+                            Text("\(viewModel.cartProducts[item] ?? 0)")
                                 .foregroundColor(dark_color)
                                 .font(.system(size: 20))
                                 .fontWeight(.regular)
                             
                             Button(
                                 action: {
-                                    if showMenu.cart[item]! == 1 {
-                                        showMenu.cart[item] = nil
+                                    if viewModel.cartProducts[item]! == 1 {
+                                        viewModel.cartProducts[item] = nil
                                     } else {
-                                        showMenu.cart[item]! -= 1
+                                        viewModel.cartProducts[item]! -= 1
                                     }
                                 }) {
                                     ZStack {
@@ -133,16 +131,5 @@ struct CartItem: View {
             )
         }
         
-    }
-    init(_ text:String = "Zion 2", _ image:String="adidas"){
-        self.text = text
-        self.image = image
-        self.item = shoesArray.filter{$0.name == text}[0]
-    }
-}
-
-struct CardItem_Preview: PreviewProvider {
-    static var previews: some View {
-        CartItem()
     }
 }

@@ -47,7 +47,7 @@ struct LikedCardView: View {
             
             NavigationLink(
                 destination:
-                    Item(
+                    ItemView(
                         product.name,
                         product.price,
                         product.imageArray,

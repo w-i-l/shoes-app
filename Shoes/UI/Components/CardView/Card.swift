@@ -15,10 +15,9 @@ struct CardView: View {
     @State private var isPresented = false
     
     var body: some View{
-        
-        //GO TO ITEM PAGE
+
         NavigationLink(
-            destination: Item(
+            destination: ItemView(
                 product.name,
                 product.price,
                 product.imageArray,
@@ -35,13 +34,13 @@ struct CardView: View {
             
             ZStack {
                 
-                //BODY
+                // body
                 RoundedRectangle(cornerRadius: 20)
                     .fill(gray2)
                     .frame(width: UIScreen.main.bounds.width / 2.5, height: UIScreen.main.bounds.width / 2.5)
                     .innerShadow(color: gray2)
                 
-                //INFOS
+                // info
                 VStack{
                     Image(product.imageArray[0])
                         .resizable()
@@ -83,17 +82,10 @@ struct CardView: View {
             }
             .frame(width: UIScreen.main.bounds.width / 2.5,height: UIScreen.main.bounds.width / 2.5)
             .padding(5)
-            .onTapGesture() {
-                viewModel.hideTabBar()
-                isPresented = true
-            }
         }
         
-        //ON LONG PRESS SIMILAR WITH 3DTOUCH
+        // 3D Touch similar gesture
         .contextMenu {
-            
-            //IF IT IS LIKED
-            
             Button(
                 action: {
                     viewModel.manageLikedProduct(product: product)

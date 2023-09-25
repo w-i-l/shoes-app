@@ -9,16 +9,16 @@ import SwiftUI
 
 struct Checkout: View {
     
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var showMenu: Storage
     
-    @State var street: String = " "
-    @State var number: String = " "
-    @State var town: String = " "
-    @State var region: String = " "
-    @State var country: String = " "
-    @State var isExpended: Bool = false
-    @State var paymentMethod: String = "cash"
+    @State private var street: String = " "
+    @State private var number: String = " "
+    @State private var town: String = " "
+    @State private var region: String = " "
+    @State private var country: String = " "
+    @State private var isExpended: Bool = false
+    @State private var paymentMethod: String = "cash"
     
     var body: some View {
         ZStack {
