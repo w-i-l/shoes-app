@@ -9,10 +9,10 @@ import SwiftUI
 
 struct Payment: View {
     
-    @EnvironmentObject var showMenu: Storage
-    @Environment(\.dismiss) var dismiss
-    
-    @State var update: Bool = false
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var viewModel: PaymentViewModel = .init()
+
+    @State private var update: Bool = false
     
     var body: some View {
         ZStack {
@@ -38,7 +38,7 @@ struct Payment: View {
                 }
                 
                 
-                NavigationLink(destination: AddCard().navigationBarHidden(true)) {
+                NavigationLink(destination: AddCard(viewModel: viewModel).navigationBarHidden(true)) {
                     HStack {
                         
                         ZStack {
@@ -61,13 +61,13 @@ struct Payment: View {
                 
                 ScrollView(showsIndicators:false) {
                     VStack() {
-                        ForEach(showMenu.creditCards, id: \.self.creditCardModel.cardNumber) { elem in
+                        ForEach(viewModel.creditCards, id: \.self.cardNumber) { elem in
                             Button(
                                 action:{
-                                    showMenu.selectedCard = elem
+                                    viewModel.setSelectedCreditCard(creditCard: elem)
                                     dismiss()
                                 }) {
-                                    elem
+                                    CreditCardView(creditCardModel: elem)
                                         .padding()
                                 }
                             

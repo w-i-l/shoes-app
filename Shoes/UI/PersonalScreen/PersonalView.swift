@@ -21,8 +21,15 @@ struct PersonalView: View {
                 
                 VStack {
                     
-                    CreditCardView(creditCardModel: viewModel.selectedCard)
-                    
+                    // no credit card yet
+                    if viewModel.selectedCard.cardNumber == CreditCardModel().cardNumber {
+                        Text("No selected payment option")
+                            .font(.system(size: 20))
+                            .foregroundColor(gray1)
+                            .fontWeight(.light)
+                    } else {
+                        CreditCardView(creditCardModel: viewModel.selectedCard)
+                    }
                     ZStack {
                         RoundedRectangle(cornerRadius: 50)
                             .fill(background_color)

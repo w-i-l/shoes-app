@@ -1,5 +1,5 @@
 //
-//  Reviews.swift
+//  ReviewsView.swift
 //  Tesla
 //
 //  Created by mishu on 09.08.2022.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Reviews: View {
+struct ReviewsView: View {
     
     let reviewsNumber: Int
      
@@ -22,7 +22,7 @@ struct Reviews: View {
                         VStack {
                             HStack {
                                 
-                                //PERSON PICTURE
+                                // profile picture
                                 Image("person - \(no % 4 == 0  ? 1 : no % 4 + 1 )")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -30,7 +30,7 @@ struct Reviews: View {
                                     .frame(width: 30, height: 30)
                                     .clipShape(Circle())
                                 
-                                //USERNAME
+                                // username
                                 Text(usernames.randomElement()!)
                                     .foregroundColor(dark_color)
                                     .font(.system(size: 20))
@@ -38,7 +38,7 @@ struct Reviews: View {
                                 
                                 Spacer()
                                 
-                                //RATING
+                                // rating
                                 Text(String.init(format: "%.1f / 5", Double.random(in: 0.1...5)))
                                     .foregroundColor(dark_color)
                                     .font(.system(size: 18))
@@ -65,14 +65,10 @@ struct Reviews: View {
             .padding(.top, 10)
         }
     }
-    
-    init(_ reviews:Int = 10){
-        self.reviewsNumber = reviews
-    }
 }
 
 struct Reviews_Preview:PreviewProvider{
     static var previews: some View{
-        Reviews()
+        ReviewsView(reviewsNumber: 12)
     }
 }

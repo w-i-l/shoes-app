@@ -39,66 +39,15 @@ class Storage:ObservableObject{
     
 }
 
-
-
-class NumbersOnly: ObservableObject {
-    @Published var cardNumber = " " {
-        didSet {
-            
-            
-            let filtered = cardNumber.filter { $0.isNumber }
-            
-            if cardNumber != filtered && cardNumber.count <= 16 {
-                cardNumber = filtered
-            }
-            else if cardNumber.count > 16{
-                cardNumber = String(filtered.prefix(16))
-                
-
-            }
-        }
-    }
-        
+struct Shadow: ViewModifier {
     
-    @Published var expirationDate = " " {
-        didSet {
-            let filtered = expirationDate.filter { $0.isNumber }
-            
-            if expirationDate != filtered  && expirationDate.count <= 4{
-                expirationDate = filtered
-            }
-            else if expirationDate.count > 4{
-                expirationDate = String(filtered.prefix(4))
-            }
-            
-            
-        }
-    }
-    
-    @Published var holderName = " " {
-        didSet {
-           
-            let filtered = holderName.filter {$0.isLetter || $0 == " "}
-            
-            if holderName != filtered {
-                holderName = filtered
-            }
-            
-            
-        }
-    }
-}
-
-
-struct Shadow:ViewModifier{
-    let color:Color
-    let cornerRadius:CGFloat
+    let color: Color
+    let cornerRadius: CGFloat
     let intensity = 0.05
     let lightIntensity = 0.1
     func body(content: Content) -> some View {
+        
         content
-//            .shadow(color: Color(red: UIColor(color).cgColor.components![0]-intensity , green: UIColor(color).cgColor.components![1]-intensity , blue: UIColor(color).cgColor.components![2]-intensity), radius: 4, x: 6, y: 6)
-//            .shadow(color: Color(red: UIColor(color).cgColor.components![0]+lightIntensity , green: UIColor(color).cgColor.components![1]+lightIntensity , blue: UIColor(color).cgColor.components![2]+lightIntensity), radius: 4, x: -6, y: -6)
             .shadow(color: .white, radius: 5, x: -5, y: -5)
             .shadow(color: .gray, radius: 3, x: 5, y: 5)
             .overlay(
@@ -108,19 +57,17 @@ struct Shadow:ViewModifier{
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                         .shadow(color: white, radius: 5, x: -5, y: -5)
                         .clipShape(RoundedRectangle(cornerRadius: 20))
-                    
                 )
-
     }
     init(color: Color = .white,cornerRadius:CGFloat = 20){
         self.color = color
         self.cornerRadius = cornerRadius
     }
 }
-
-struct Inner:ViewModifier{
-    let color:Color
-    let cornerRadius:CGFloat
+ 
+struct Inner: ViewModifier {
+    let color: Color
+    let cornerRadius: CGFloat
     func body(content: Content) -> some View {
         content
             .overlay(
@@ -143,9 +90,3 @@ extension View{
         modifier(Inner(color: color, cornerRadius: cornerRadius))
     }
 }
-
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}

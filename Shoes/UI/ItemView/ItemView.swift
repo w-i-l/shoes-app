@@ -151,7 +151,7 @@ struct ItemView: View {
                     
                     // feedback hub
                     .sheet(isPresented: $showingSheet) {
-                        Reviews(reviews)
+                        ReviewsView(reviewsNumber: reviews)
                             .onTapGesture {
                                 showingSheet = false
                             }
@@ -214,7 +214,7 @@ struct ItemView: View {
                                 showingSizes = true
                             }
                             .sheet(isPresented: $showingSizes) {
-                                Sizes(sizes)
+                                ProductSizesView(sizes)
                                     .onTapGesture {
                                         showingSizes = false
                                     }

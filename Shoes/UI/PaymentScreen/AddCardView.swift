@@ -9,11 +9,10 @@ import SwiftUI
 
 struct AddCard: View {
     
-    @EnvironmentObject var showMenu: Storage
-    @ObservedObject var value: NumbersOnly = NumbersOnly()
+    @ObservedObject var viewModel: PaymentViewModel
+    @Environment(\.dismiss) private var dismiss
     
-    @Environment(\.dismiss) var dismiss
-    @State var dissabled:Bool = true
+    @State private var dissabled: Bool = true
     
     var body: some View {
         ZStack {
@@ -21,7 +20,7 @@ struct AddCard: View {
             
             VStack {
                 
-                //back button
+                // back button
                 HStack {
                     Button(
                         action: {
@@ -41,10 +40,15 @@ struct AddCard: View {
                     Button(
                         action:{
                             //only if the input are valid
-                            if value.cardNumber.count == 16 && value.holderName.count > 8 {
+                            // 16 + 3 white spaces
+                            if viewModel.creditCardNumber.count == 19 && viewModel.holderName.count > 8 {
                                 
-                                showMenu.creditCards.append(CreditCardView(creditCardModel: CreditCardModel()))
-                                
+                                viewModel.addCreditCard(creditCard: CreditCardModel(
+                                    gradient: viewModel.gradient,
+                                    cardNumber: viewModel.creditCardNumber,
+                                    name: viewModel.holderName,
+                                    expirationDate: viewModel.expirationDate
+                                ))
                                 dismiss()
                             }
                         }){
@@ -62,20 +66,30 @@ struct AddCard: View {
                                 
                             }
                         }
-                    
-                    
                 }
                 
                 
-                CreditCardView(creditCardModel: CreditCardModel())
-                    .id([value.cardNumber, value.holderName])
+                CreditCardView(creditCardModel: CreditCardModel(
+                    gradient: viewModel.gradient,
+                    cardNumber: viewModel.creditCardNumber,
+                    name: viewModel.holderName,
+                    expirationDate: viewModel.expirationDate
+                ))
+                    .id([
+                        viewModel.creditCardNumber,
+                        viewModel.holderName,
+                        CreditCardModel.dateFormatter.string(from: viewModel.expirationDate)
+                         ])
                     .padding(.bottom,30)
                     .padding(.top,10)
                 
                 ScrollView(showsIndicators:false) {
                     
                     VStack(spacing:20) {
-                        ForEach(Array(zip(["Card number","Holder name","Expiration Date (MM/YY)"],[$value.cardNumber,$value.holderName,$value.expirationDate])),id: \.0) { elem in
+                        ForEach(Array(zip(
+                            ["Card number", "Holder name"],
+                            [$viewModel.creditCardNumber, $viewModel.holderName]
+                        )),id: \.0) { elem in
                             VStack(spacing:0) {
                                 HStack {
                                     Text(elem.0)
@@ -84,19 +98,19 @@ struct AddCard: View {
                                         .foregroundColor(.gray)
                                     
                                     Spacer()
-                                    
-                                    if elem.0 == "Card number" && value.cardNumber.count < 16 && value.cardNumber != " " {
+                                    // TODO: Validari
+                                    if elem.0 == "Card number" && false {
                                         Text("Incorect card number")
                                             .font(.system(size: 16))
                                             .fontWeight(.thin)
                                             .foregroundColor(red_pastel)
                                         
-                                    } else if elem.0 == "Holder name" && value.holderName.count < 8 && value.holderName != " " {
+                                    } else if elem.0 == "Holder name" && false {
                                         Text("Incorect holder name")
                                             .font(.system(size: 16))
                                             .fontWeight(.thin)
                                             .foregroundColor(red_pastel)
-                                    } else if elem.0 == "Expiration Date (MM/YY)" {
+                                    } else if elem.0 == "Expiration Date (MM/YY)" && false {
                                         Text("Incorect expiration date")
                                             .font(.system(size: 16))
                                             .fontWeight(.thin)
@@ -113,13 +127,23 @@ struct AddCard: View {
                                     
                                     TextField("", text: elem.1)
                                         .foregroundColor(dark_color)
-                                        .padding(.horizontal,20)
+                                        .padding(.horizontal, 20)
                                         .keyboardType( (elem.0 == "Card number" || elem.0 == "Expiration Date (MM/YY)") ? .numberPad : .alphabet)
                                         .disableAutocorrection(true)
                                         .frame(width: UIScreen.main.bounds.width - 40, height: 50)
                                 }
                             }
                         }
+                        
+                        DatePicker(
+                            "Expiration date",
+                            selection: $viewModel.expirationDate,
+                            in: Date()...,
+                            displayedComponents: .date
+                        )
+                            .padding(.horizontal, 20)
+                            .foregroundColor(dark_color)
+                            .accentColor(dark_color)
                     }
                 }
             }
@@ -139,6 +163,6 @@ struct AddCard: View {
 
 struct PreviewADD: PreviewProvider {
     static var previews: some View {
-        AddCard()
+        AddCard(viewModel: PaymentViewModel())
     }
 }

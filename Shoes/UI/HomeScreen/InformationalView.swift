@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Run: View {
+struct InformationalView: View {
     
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var showMenu: Storage
@@ -62,7 +62,7 @@ struct Run: View {
     }
 }
 
-//STREACHY HEADER
+// streatchy header
 struct OnlyHeader: View {
     let image: String
     let height: CGFloat
@@ -102,7 +102,7 @@ struct OnlyHeader: View {
 
 struct previewS: PreviewProvider {
     static var previews: some View {
-        Run()
+        InformationalView()
     }
 }
 

@@ -40,7 +40,7 @@ struct HomeView: View {
                          ScrollView(.horizontal,showsIndicators:false) {
                              HStack(spacing: 20){
                                  ForEach(["run","swim","climb"],id:\.self){elem in
-                                     NavigationLink(destination: Run().navigationBarHidden(true)) {
+                                     NavigationLink(destination: InformationalView().navigationBarHidden(true)) {
                                          ZStack{
                                             
                                             Image(elem)

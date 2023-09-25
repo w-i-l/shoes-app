@@ -7,8 +7,10 @@
 
 import SwiftUI
 
-struct Sizes: View {
+struct ProductSizesView: View {
+    
     let sizes: [Int]
+    
     var body: some View {
         ZStack{
             
@@ -58,6 +60,6 @@ struct Sizes: View {
 
 struct Sizes_Preview:PreviewProvider{
     static var previews: some View{
-        Sizes()
+        ProductSizesView()
     }
 }

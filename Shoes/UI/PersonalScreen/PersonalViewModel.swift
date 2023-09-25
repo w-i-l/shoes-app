@@ -20,5 +20,12 @@ class PersonalViewModel: BaseViewModel {
                 self?.orders = orders
             }
             .store(in: &self.bag)
+        
+        PaymentService.shared.selectedCard
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] selectedCard in
+                self?.selectedCard = selectedCard
+            }
+            .store(in: &self.bag)
     }
 }
